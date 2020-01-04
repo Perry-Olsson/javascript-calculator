@@ -8,7 +8,7 @@
     position: relative;
     width: 100%;
     height: 0px;
-    padding-bottom: 130%;
+    padding-bottom: 135%;
 }
 #calc-wrapper {
     position: absolute;
@@ -16,27 +16,30 @@
     width: 100%;
     top: 0;
     left: 0;
-    padding: 10px;
     border: solid;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-rows: repeat(8, 1fr);
     box-sizing: border-box;
 }
 
 .text-box {
     grid-column: 1/5;
-    border: solid 1px;
-    margin: 0 0 10px 0;
+    border-bottom: 1px solid #999;
+    margin: 0px 0 10px 0px;
     font-size: 4em;
 }
 
 .btn {
-    background-color: #333;
+    background-image: linear-gradient(to right, rgba(51, 51, 51, 1), rgba(51, 51, 51, 0.9), rgba(51, 51, 51, 1));
     border: 1px solid #aaa;
     border-radius: 4px;
     color: white;
     font-size: 2em;
+}
+
+.btn:active {
+    background-color: rgb(51, 51, 51);
 }
 
 .btn:focus {
