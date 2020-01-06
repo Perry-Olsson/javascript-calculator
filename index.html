@@ -11,7 +11,9 @@
         <div id="calc-wrapper">
             <div id="text-box-wrapper">
                 <div class="text-box history"></div>
-                <div class="text-box current" style="border-bottom: 2px solid #999">|</div>
+                <div type="text" class="text-box current" style="border-bottom: 2px solid #999">
+                    <textarea autofocus></textarea>
+                </div>
             </div>
             <div id="button-wrapper">
                 <button class="btn operator squared"><div class="square-wrapper"><span id="x">x</span><span id="two">2</span></div></button>
@@ -20,8 +22,9 @@
                 <button class="btn back-space"><img src="images/icons8-clear-symbol-100.png" width="50px"></button>
                 <button class="btn operator square-root">
                     <div id="square-root-wrapper">
-                    <div id="line1"></div><div id="line2"></div><div id="line3"></div>
-                    </div></button>
+                        <div id="line1"></div><div id="line2"></div><div id="line3"></div>
+                    </div>
+                </button>
                 <button class="btn sign">+/-</button>
                 <button class="btn percentify">%</button>
                 <button class="btn operator divide">/</button>
