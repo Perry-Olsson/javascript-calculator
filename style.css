@@ -1,26 +1,26 @@
+
+body {
+    margin: 0;
+    height: 100vh;
+}
+
 #content-wrapper {
-    margin: auto;
-    max-width: 500px;
-}
-
-
-#wrapper {
-    position: relative;
-    width: 100%;
-    height: 0px;
-    padding-bottom: 135%;
-}
-#calc-wrapper {
-    position: absolute;
     height: 100%;
     width: 100%;
-    top: 0;
-    left: 0;
-    border: solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calc-wrapper {
+    width: 450px;
+    height: 650px;
+    border: solid #444;
     border-radius: 5px;
     display: grid;
     grid-template-rows: 1fr 3fr;
     box-sizing: border-box;
+    box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .6);
 }
 
 #text-box-wrapper {
@@ -29,6 +29,7 @@
 }
 
 #button-wrapper {
+     background-color: #6176A7;
     padding: 15px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -40,12 +41,14 @@
     border-bottom: 1px solid #999;
     margin: 0;
     font-size: 4em;
+    text-align: right;
+    padding: 0 0.7rem;
 }
 
 .btn {
-    background-image: radial-gradient(rgba(51, 51, 51, 1), rgba(51, 51, 51, 0.95), rgba(51, 51, 51, 0.9));
+    background-image: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(51, 51, 51, 1));
     margin: 1px;
-    border: 1px solid white;
+    border: 2px solid #444;
     border-radius: 4px;
     color: white;
     font-size: 2em;
@@ -53,12 +56,67 @@
 
 .btn:active {
     background-color: rgb(51, 51, 51);
+    position: relative;
+    top: 1px;
 }
 
 .btn:focus {
     outline: none;
 }
 
+.square-wrapper {
+    display: flex;
+    margin: auto;
+    width: fit-content;
+}
+
+#x {
+    position: relative;
+    top: 5px;
+}
+
+#two {
+    font-size: 1.4rem;
+    position: relative;
+    bottom: 3px;
+}
+
+#square-root-wrapper {
+    width: fit-content;
+    position: relative;
+    left: 20px;
+    top: 8px;
+}
+
+#line1 {
+    border-bottom: 3px solid white;
+    width: 0.5rem;
+    transform: skew(0, 60deg)
+}
+
+#line2 {
+    border-bottom: 3px solid white;
+    width: 1rem;
+    transform: skew(0, -60deg);
+    position: relative;
+    bottom: 9px;
+    left: 8px;
+}
+
+#line3 {
+    border-bottom: 2px solid white;
+    width: 1rem;
+    position: relative;
+    bottom: 26px;
+    left: 24px;
+}
+
+.back-space {
+    display: flex;
+    justify-content: center;
+}
+
 .zero {
     grid-column: 1/3;
 }
+

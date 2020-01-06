@@ -8,38 +8,39 @@
 </head>
 <body>
     <div id="content-wrapper">
-        <div id="wrapper">
         <div id="calc-wrapper">
             <div id="text-box-wrapper">
-            <div class="text-box"></div>
-            <div class="text-box">|</div>
+                <div class="text-box history"></div>
+                <div class="text-box current" style="border-bottom: 2px solid #999">|</div>
             </div>
             <div id="button-wrapper">
-            <button class="btn operator">x2</button>
-            <button class="btn" id="clear-all">AC</button>
-            <button class="btn" id="clear">C</button>
-            <button class="btn" id="backspace"><=</button>
-            <button class="btn operator">2rootX</button>
-            <button class="btn" id="sign">+/-</button>
-            <button class="btn" id="percentify">%</button>
-            <button class="btn operator">/</button>
-            <button class="btn">7</button>
-            <button class="btn">8</button>
-            <button class="btn">9</button>
-            <button class="btn operator">x</button>
-            <button class="btn">4</button>
-            <button class="btn">5</button>
-            <button class="btn">6</button>
-            <button class="btn operator">-</button>
-            <button class="btn">1</button>
-            <button class="btn">2</button>
-            <button class="btn">3</button>
-            <button class="btn operator">+</button>
-            <button class="btn zero">0</button>
-            <button class="btn" id="decimal">.</button>
-            <button class="btn operator">=</button>
+                <button class="btn operator squared"><div class="square-wrapper"><span id="x">x</span><span id="two">2</span></div></button>
+                <button class="btn clear-all">AC</button>
+                <button class="btn clear">C</button>
+                <button class="btn back-space"><img src="images/icons8-clear-symbol-100.png" width="50px"></button>
+                <button class="btn operator square-root">
+                    <div id="square-root-wrapper">
+                    <div id="line1"></div><div id="line2"></div><div id="line3"></div>
+                    </div></button>
+                <button class="btn sign">+/-</button>
+                <button class="btn percentify">%</button>
+                <button class="btn operator divide">/</button>
+                <button class="btn seven">7</button>
+                <button class="btn eight">8</button>
+                <button class="btn nine">9</button>
+                <button class="btn operator multiply">x</button>
+                <button class="btn four">4</button>
+                <button class="btn five">5</button>
+                <button class="btn six">6</button>
+                <button class="btn operator subtract">-</button>
+                <button class="btn one">1</button>
+                <button class="btn two">2</button>
+                <button class="btn three">3</button>
+                <button class="btn operator add">+</button>
+                <button class="btn zero">0</button>
+                <button class="btn decimal">.</button>
+                <button class="btn operator equals">=</button>
             </div>
-        </div>
         </div>
     </div>
 </body>
