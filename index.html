@@ -11,8 +11,7 @@
         <div id="calc-wrapper">
             <div id="text-box-wrapper">
                 <div class="text-box history"></div>
-                <div type="text" class="text-box current" style="border-bottom: 2px solid #999">
-                    <textarea autofocus></textarea>
+                <div type="text" class="text-box" id="current-text" style="border-bottom: 2px solid #999">
                 </div>
             </div>
             <div id="button-wrapper">
@@ -28,23 +27,24 @@
                 <button class="btn sign">+/-</button>
                 <button class="btn percentify">%</button>
                 <button class="btn operator divide">/</button>
-                <button class="btn seven">7</button>
-                <button class="btn eight">8</button>
-                <button class="btn nine">9</button>
+                <button class="btn num" value="7">7</button>
+                <button class="btn num" value="8">8</button>
+                <button class="btn num" value="9">9</button>
                 <button class="btn operator multiply">x</button>
-                <button class="btn four">4</button>
-                <button class="btn five">5</button>
-                <button class="btn six">6</button>
+                <button class="btn num" value="4">4</button>
+                <button class="btn num" value="5">5</button>
+                <button class="btn num" value="6">6</button>
                 <button class="btn operator subtract">-</button>
-                <button class="btn one">1</button>
-                <button class="btn two">2</button>
-                <button class="btn three">3</button>
+                <button class="btn num" value="1">1</button>
+                <button class="btn num" value="2">2</button>
+                <button class="btn num" value="3">3</button>
                 <button class="btn operator add">+</button>
-                <button class="btn zero">0</button>
+                <button class="btn zero num" value="0">0</button>
                 <button class="btn decimal">.</button>
                 <button class="btn operator equals">=</button>
             </div>
         </div>
     </div>
+<script type="text/javascript" src="script.js"></script>
 </body>
 </html>
