@@ -1,8 +1,10 @@
-let a = '';
-let b;
+let a = ''; //store first entered number
+let b = '';
+let ans;  //store second number
 let eventSaver;
 let operator;
 const currentText = document.getElementById("current-text");
+currentText.textContent = ''
 
 const createOperandElement = (event) => {
     let span = document.createElement("span");
@@ -18,19 +20,27 @@ const createAnswerElement = (answer) => {
     currentText.appendChild(span);
 }
 
-const setVar = () => {
+const parseEntry = () => {
     let temp = document.querySelectorAll('.selector');
     let concat = ''
     for (item of temp) {
         concat += item.textContent;
     }
-    concat = parseInt(concat, 10);
+    concat = parseFloat(concat, 10);
     return concat
 }
 
-const multiply = (a) => {
-    let b = setVar();
-    return a * b;
+const setVar = (op) => {
+    eventSaver = '';
+    operator = op;
+    a = parseEntry();
+    currentText.textContent = '';
+}
+
+const setAns = () => {
+    currentText.textContent = '';
+    createAnswerElement(ans);
+    eventSaver = event.target.textContent; //To clear stored variables if a number is entered directly after an answer is given
 }
 
 document.addEventListener("click", function (event) {
@@ -41,29 +51,42 @@ document.addEventListener("click", function (event) {
             a = '';
         }
         createOperandElement(event)
-    } else if (event.target.matches('.multiply')) {
-        if (currentText.textContent !== '') {
-            eventSaver = ''
-            operator = '*';
-            a = setVar();
-            currentText.innerHTML = ''
-        }
-    } else if (event.target.matches('.equals')) {
-        if (a !== '' && currentText.innerHTML !== '') {
+    } else if (currentText.textContent !== '') {
+        if (event.target.matches('.multiply')) {
+            setVar(event.target.value);
+        } else if (event.target.matches('.add')) {
+            setVar(event.target.value);
+        } else if (event.target.matches('.subtract')) {
+            setVar(event.target.value);
+        } else if (event.target.matches('.divide')) {
+            setVar(event.target.value);
+        } else if (event.target.matches('.equals') && a !== '') {
             switch (operator) {
                 case '*':
-                    b = multiply(a).toString();
-                    currentText.innerHTML = '';
-                    createAnswerElement(b);
-                    eventSaver = event.target.textContent;
+                    ans = (a * parseEntry()).toString();
+                    setAns();
+                    break;
                 case '+':
-                    //
+                    ans = (a + parseEntry()).toString();
+                    setAns();
+                    break;
                 case '-':
-                    //
+                    if (eventSaver === '=') { ans -= b; }
+                    else {
+                        b = parseEntry();
+                        ans = (a - b).toString();
+                    }
+                    setAns();
+                    break;//
                 case '/':
-                    //
+                    if (eventSaver === '=') { ans /= b; }
+                    else {
+                        b = parseEntry();
+                        ans = (a / b).toString();
+                    }
+                    setAns();
+                    break;//
             }
-            
         }
     }
 })
