@@ -20,6 +20,12 @@ const createAnswerElement = (answer) => {
     currentText.appendChild(span);
 }
 
+const backSpace = () => {
+    let temp = document.querySelectorAll('.operand');
+    const lastChildIndex = temp.length - 1;
+    temp[lastChildIndex].parentNode.removeChild(temp[lastChildIndex]);
+}
+
 const parseEntry = () => {
     let temp = document.querySelectorAll('.selector');
     let concat = ''
@@ -50,7 +56,15 @@ document.addEventListener("click", function (event) {
             eventSaver = ''
             a = '';
         }
-        createOperandElement(event)
+        createOperandElement(event);
+    } else if (event.target.matches('.clear-all')) {
+        currentText.textContent = '';
+        a = '';
+        b = '';
+        ans = '';
+        operator = '';
+    } else if (event.target.matches('.back-space')) {
+        backSpace();
     } else if (currentText.textContent !== '') {
         if (event.target.matches('.multiply')) {
             setVar(event.target.value);
