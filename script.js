@@ -21,10 +21,10 @@ const createAnswerElement = (answer) => {
 }
 
 const backSpace = () => {
-    let temp = document.querySelectorAll('.operand');
+    let temp1 = document.querySelectorAll('.operand');
     /*let lastChildIndex = temp.length - 1;
     temp[lastChildIndex].parentNode.removeChild(temp[lastChildIndex]);*/
-    temp[temp.length - 1].remove();    
+    temp1[temp1.length - 1].remove();    
 }
 
 const parseEntry = () => {
@@ -58,9 +58,6 @@ document.addEventListener("click", function (event) {
             a = '';
         }
         createOperandElement(event);
-    } else if (event.target.matches('.back-space')) {
-        backSpace();
-        console.log('hello');
     } else if (event.target.matches('.clear-all')) {
         currentText.textContent = '';
         a = '';
@@ -68,7 +65,9 @@ document.addEventListener("click", function (event) {
         ans = '';
         operator = '';
     } else if (currentText.textContent !== '') {
-        if (event.target.matches('.multiply')) {
+        if (event.target.matches('.back-space') && eventSaver !== '=') {
+            backSpace();
+        } else if (event.target.matches('.multiply')) {
             setVar(event.target.value);
         } else if (event.target.matches('.add')) {
             setVar(event.target.value);
