@@ -22,8 +22,9 @@ const createAnswerElement = (answer) => {
 
 const backSpace = () => {
     let temp = document.querySelectorAll('.operand');
-    const lastChildIndex = temp.length - 1;
-    temp[lastChildIndex].parentNode.removeChild(temp[lastChildIndex]);
+    /*let lastChildIndex = temp.length - 1;
+    temp[lastChildIndex].parentNode.removeChild(temp[lastChildIndex]);*/
+    temp[temp.length - 1].remove();    
 }
 
 const parseEntry = () => {
@@ -45,7 +46,7 @@ const setVar = (op) => {
 
 const setAns = () => {
     currentText.textContent = '';
-    createAnswerElement(ans);
+    createAnswerElement(ans.toString());
     eventSaver = event.target.textContent; //To clear stored variables if a number is entered directly after an answer is given
 }
 
@@ -57,14 +58,15 @@ document.addEventListener("click", function (event) {
             a = '';
         }
         createOperandElement(event);
+    } else if (event.target.matches('.back-space')) {
+        backSpace();
+        console.log('hello');
     } else if (event.target.matches('.clear-all')) {
         currentText.textContent = '';
         a = '';
         b = '';
         ans = '';
         operator = '';
-    } else if (event.target.matches('.back-space')) {
-        backSpace();
     } else if (currentText.textContent !== '') {
         if (event.target.matches('.multiply')) {
             setVar(event.target.value);
@@ -77,18 +79,26 @@ document.addEventListener("click", function (event) {
         } else if (event.target.matches('.equals') && a !== '') {
             switch (operator) {
                 case '*':
-                    ans = (a * parseEntry()).toString();
+                    if (eventSaver === '=') { ans *= b; }
+                    else {
+                        b = parseEntry();
+                        ans = a * b
+                    }
                     setAns();
                     break;
                 case '+':
-                    ans = (a + parseEntry()).toString();
+                    if (eventSaver === '=') { ans += b; }
+                    else {
+                        b = parseEntry();
+                        ans = a + b;
+                    }
                     setAns();
                     break;
                 case '-':
                     if (eventSaver === '=') { ans -= b; }
                     else {
                         b = parseEntry();
-                        ans = (a - b).toString();
+                        ans = a - b;
                     }
                     setAns();
                     break;//
@@ -96,7 +106,7 @@ document.addEventListener("click", function (event) {
                     if (eventSaver === '=') { ans /= b; }
                     else {
                         b = parseEntry();
-                        ans = (a / b).toString();
+                        ans = a / b;
                     }
                     setAns();
                     break;//
