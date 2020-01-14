@@ -38,10 +38,12 @@ const parseEntry = () => {
 }
 
 const setVar = (op) => {
-    eventSaver = '';
-    operator = op;
-    a = parseEntry();
-    currentText.textContent = '';
+    if (currentText.textContent !== '') {
+        eventSaver = 'operator';
+        operator = op;
+        a = parseEntry();
+        currentText.textContent = '';
+    } else { operator = op }
 }
 
 const setAns = () => {
@@ -64,7 +66,7 @@ document.addEventListener("click", function (event) {
         //b = '';
         //ans = '';
         //operator = '';
-    } else if (currentText.textContent !== '') {
+    } else if (currentText.textContent !== '' || eventSaver === 'operator') {
         if (event.target.matches('.back-space') && eventSaver !== '=') {
             backSpace();
         } else if (event.target.matches('.multiply')) {
@@ -75,7 +77,7 @@ document.addEventListener("click", function (event) {
             setVar(event.target.textContent);
         } else if (event.target.matches('.divide')) {
             setVar(event.target.textContent);
-        } else if (event.target.matches('.equals') && a !== '') {
+        } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '') {
             switch (operator) {
                 case 'x':
                     if (eventSaver === '=') { ans *= b; }
