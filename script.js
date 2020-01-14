@@ -9,7 +9,7 @@ currentText.textContent = ''
 const createOperandElement = (event) => {
     let span = document.createElement("span");
     span.setAttribute('class', 'operand selector');
-    span.appendChild(document.createTextNode(event.target.value))
+    span.appendChild(document.createTextNode(event.target.textContent))
     currentText.appendChild(span);
 }
 
@@ -61,23 +61,23 @@ document.addEventListener("click", function (event) {
     } else if (event.target.matches('.clear-all')) {
         currentText.textContent = '';
         a = '';
-        b = '';
-        ans = '';
-        operator = '';
+        //b = '';
+        //ans = '';
+        //operator = '';
     } else if (currentText.textContent !== '') {
         if (event.target.matches('.back-space') && eventSaver !== '=') {
             backSpace();
         } else if (event.target.matches('.multiply')) {
-            setVar(event.target.value);
+            setVar(event.target.textContent);
         } else if (event.target.matches('.add')) {
-            setVar(event.target.value);
+            setVar(event.target.textContent);
         } else if (event.target.matches('.subtract')) {
-            setVar(event.target.value);
+            setVar(event.target.textContent);
         } else if (event.target.matches('.divide')) {
-            setVar(event.target.value);
+            setVar(event.target.textContent);
         } else if (event.target.matches('.equals') && a !== '') {
             switch (operator) {
-                case '*':
+                case 'x':
                     if (eventSaver === '=') { ans *= b; }
                     else {
                         b = parseEntry();
