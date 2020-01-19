@@ -45,10 +45,14 @@ const parseEntry = () => {
 //saves first entry and/or operator when an operator key is pressed
 const setVar = (op) => {
     if (currentText.textContent !== '') {
-        eventSaver = 'operator';
-        operator = op;
-        a = parseEntry();
-        currentText.textContent = '';
+        if (currentText.firstChild.matches('.answer') && eventSaver === 'chain') {
+            operator = op
+        } else {
+            eventSaver = 'operator';
+            operator = op;
+            a = parseEntry();
+            currentText.textContent = '';
+        }
     } else { operator = op }
 }
 
@@ -103,6 +107,7 @@ const chainCalculate = () => {
     evaluate();
     a = ans;
     eventSaver = 'chain';
+    operator = event.target.textContent;
 }
 
 document.addEventListener("click", function (event) {
@@ -113,6 +118,7 @@ document.addEventListener("click", function (event) {
             a = '';
         } else if (eventSaver === 'chain') {
             currentText.textContent = '';
+            eventSaver = 'operator'
         }
         createOperandElement(event);
     } else if (event.target.matches('.clear-all')) {
@@ -124,22 +130,22 @@ document.addEventListener("click", function (event) {
     } else if (currentText.textContent !== '' || eventSaver === 'operator') {
         if (event.target.matches('.back-space') && eventSaver !== '=') {
             backSpace();
-        } else if (event.target.matches('.clear')) {
+        } else if (event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
-            if (a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
             } else { setVar(event.target.textContent); }
         } else if (event.target.matches('.add')) {
-            if (a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
             } else { setVar(event.target.textContent); }
         } else if (event.target.matches('.subtract')) {
-            if (a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
             } else { setVar(event.target.textContent); }
         } else if (event.target.matches('.divide')) {
-            if (a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
             } else { setVar(event.target.textContent); }
         } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '') {
