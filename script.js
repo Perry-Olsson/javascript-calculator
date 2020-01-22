@@ -6,6 +6,7 @@ let operator; //store operator
 
 //html element where numbers entered are displayed
 const currentText = document.getElementById("current-text");
+const history = document.getElementById('history');
 currentText.textContent = ''
 
 //creates and displays (in currentText element) an element when a digit or decimal is pressed
@@ -25,6 +26,13 @@ const createAnswerElement = (answer) => {
     currentText.appendChild(span);
 }
 
+const createHistoryElement = (num, sign = '') => {
+    history.textContent = '';
+    let span = document.createElement('span');
+    span.setAttribute('class', 'history-child');
+    span.appendChild(document.createTextNode(`${num} ${sign}`));
+    history.appendChild(span);
+}
 //deletes most recently entered digit or decimal point
 const backSpace = () => {
     let temp1 = document.querySelectorAll('.operand');
@@ -58,9 +66,19 @@ const setVar = (op) => {
 
 //displays answer in currentText element
 const setAns = () => {
+    if (ans / 1000000000000 >= 1) { ans = ans.toExponential(2) }
+    if (eventSaver === '=') {
+        history.firstChild.textContent = `${currentText.textContent} ${operator}`
+    } 
     currentText.textContent = '';
     createAnswerElement(ans.toString());
-    eventSaver = event.target.textContent; //To clear stored variables if a number is entered directly after an answer is given
+    if (history.textContent.length >= 23) {
+        history.firstChild.textContent = `${currentText.textContent}`;
+    } else if (eventSaver === 'chain') {
+        history.firstChild.textContent += ` ${b}`;
+    } else {
+        history.firstChild.textContent += ` ${b} = ${ans}` //To clear stored variables if a number is entered directly after an answer is given
+    }
 }
 
 //evalutes given equation
@@ -83,7 +101,9 @@ const evaluate = () => {
             setAns();
             break;
         case '-':
-            if (eventSaver === '=') { ans -= b; }
+            if (eventSaver === '=') {
+                ans -= b;
+            }
             else {
                 b = parseEntry();
                 ans = a - b;
@@ -104,14 +124,14 @@ const evaluate = () => {
 //allows chain calculations e.g. 2 x 3 x 5 while displaying each answer as more 
 //numbers and operators are entered
 const chainCalculate = () => {
-    evaluate();
-    a = ans;
     eventSaver = 'chain';
+    evaluate();
     operator = event.target.textContent;
+    a = ans;
 }
 
 document.addEventListener("click", function (event) {
-    if (event.target.matches(".num")) {
+    if (event.target.matches(".num") && currentText.childElementCount < 12) {
         if (eventSaver === '=') {
             currentText.textContent = ''
             eventSaver = ''
@@ -122,11 +142,9 @@ document.addEventListener("click", function (event) {
         }
         createOperandElement(event);
     } else if (event.target.matches('.clear-all')) {
+        history.textContent = '';
         currentText.textContent = '';
         a = '';
-        //b = '';
-        //ans = '';
-        //operator = '';
     } else if (currentText.textContent !== '' || eventSaver === 'operator') {
         if (event.target.matches('.back-space') && eventSaver !== '=') {
             backSpace();
@@ -135,21 +153,38 @@ document.addEventListener("click", function (event) {
         } else if (event.target.matches('.multiply')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-            } else { setVar(event.target.textContent); }
+                document.querySelector('.history-child').textContent += ' x';
+            } else {
+                setVar(event.target.textContent);
+                createHistoryElement(a.toString(), 'x');
+            }
         } else if (event.target.matches('.add')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-            } else { setVar(event.target.textContent); }
+                document.querySelector('.history-child').textContent += ' +';
+            } else {
+                setVar(event.target.textContent);
+                createHistoryElement(a.toString(), '+');
+            }
         } else if (event.target.matches('.subtract')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-            } else { setVar(event.target.textContent); }
+                document.querySelector('.history-child').textContent += ' -';
+            } else {
+                setVar(event.target.textContent);
+                createHistoryElement(a.toString(), '-');
+            }
         } else if (event.target.matches('.divide')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-            } else { setVar(event.target.textContent); }
-        } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '') {
+                document.querySelector('.history-child').textContent += ' /';
+            } else {
+                setVar(event.target.textContent);
+                createHistoryElement(a.toString(), '/');
+            }
+        } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '' && eventSaver !== 'chain') {
             evaluate();
+            eventSaver = '=';
         }
     }
 })
