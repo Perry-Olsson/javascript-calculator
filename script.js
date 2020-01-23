@@ -57,9 +57,10 @@ const setVar = (op) => {
         if (currentText.firstChild.matches('.answer') && eventSaver === 'chain') {
             operator = op
         } else {
+            if (eventSaver === '=') { a = ans }
+            else { a = parseEntry(); }
             eventSaver = 'operator';
             operator = op;
-            a = parseEntry();
             currentText.textContent = '';
         }
     } else { operator = op }
@@ -89,12 +90,12 @@ const numCompressor = (prev) => {
 
 //displays answer in currentText element
 const setAns = () => {
-    if (ans / 1000000000000 >= 1) { ans = ans.toExponential(2) }
     if (eventSaver === '=') {
         history.textContent = `${currentText.textContent} ${operator}`
     } 
     currentText.textContent = '';
-    createAnswerElement(ans.toString());
+    if (ans / 100000000000 > 1) { createAnswerElement(ans.toExponential(2)); }
+    else { createAnswerElement(ans.toString()); }
     if (eventSaver === 'chain') {
         history.textContent += ` ${b}`;
     } else {
