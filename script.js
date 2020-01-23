@@ -3,6 +3,7 @@ let b = ''; //store second number
 let ans;  //store last answer
 let eventSaver; //Store last event when needed
 let operator; //store operator
+let previousAnswer;
 
 //html element where numbers entered are displayed
 const currentText = document.getElementById("current-text");
@@ -26,13 +27,13 @@ const createAnswerElement = (answer) => {
     currentText.appendChild(span);
 }
 
-const createHistoryElement = (num, sign = '') => {
+/*const createHistoryElement = (num, sign = '') => {
     history.textContent = '';
     let span = document.createElement('span');
     span.setAttribute('class', 'history-child');
     span.appendChild(document.createTextNode(`${num} ${sign}`));
     history.appendChild(span);
-}
+}*/
 //deletes most recently entered digit or decimal point
 const backSpace = () => {
     let temp1 = document.querySelectorAll('.operand');
@@ -46,7 +47,7 @@ const parseEntry = () => {
     for (item of temp) {
         concat += item.textContent;
     }
-    concat = parseFloat(concat, 10);
+    concat = parseFloat(concat, 10)/*.toFixed(2)*/;
     return concat
 }
 
@@ -64,25 +65,55 @@ const setVar = (op) => {
     } else { operator = op }
 }
 
+const numCompressor = (prev) => {
+    history.textContent = `${prev} ${operator} ${b} =`
+    if (history.textContent.length >= 21) {
+        let arr = [prev, b];
+        let index;
+        if (arr[0] >= arr[1]) {
+            arr[0] = arr[0].toExponential(2);
+            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`;
+            index = 1;
+        }
+        else {
+            arr[1] = arr[1].toExponential(2);
+            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`;
+            index = 0;
+        }
+        if (history.textContent.length >= 21) {
+            arr[index] = arr[index].toExponential(2);
+            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`
+        } 
+    }
+}
+
 //displays answer in currentText element
 const setAns = () => {
     if (ans / 1000000000000 >= 1) { ans = ans.toExponential(2) }
     if (eventSaver === '=') {
-        history.firstChild.textContent = `${currentText.textContent} ${operator}`
+        history.textContent = `${currentText.textContent} ${operator}`
     } 
     currentText.textContent = '';
     createAnswerElement(ans.toString());
-    if (history.textContent.length >= 23) {
-        history.firstChild.textContent = `${currentText.textContent}`;
-    } else if (eventSaver === 'chain') {
-        history.firstChild.textContent += ` ${b}`;
+    if (eventSaver === 'chain') {
+        history.textContent += ` ${b}`;
     } else {
-        history.firstChild.textContent += ` ${b} = ${ans}` //To clear stored variables if a number is entered directly after an answer is given
+        history.textContent += ` ${b} = ${ans}`;
     }
+    if (history.textContent.length >= 19) {
+        if (eventSaver === 'chain') {
+            history.textContent = `${ans}`;
+        } else if (eventSaver === '=') { 
+            numCompressor(previousAnswer);
+        } else {
+            numCompressor(a);
+        }
+    } 
 }
 
 //evalutes given equation
 const evaluate = () => {
+    previousAnswer = ans;
     switch (operator) {
         case 'x':
             if (eventSaver === '=') { ans *= b; }
@@ -121,8 +152,8 @@ const evaluate = () => {
     }
 }
 
-//allows chain calculations e.g. 2 x 3 x 5 while displaying each answer as more 
-//numbers and operators are entered
+/*allows chain calculations e.g. 2 x 3 x 5 while displaying each answer as more 
+numbers and operators are entered*/
 const chainCalculate = () => {
     eventSaver = 'chain';
     evaluate();
@@ -131,16 +162,23 @@ const chainCalculate = () => {
 }
 
 document.addEventListener("click", function (event) {
-    if (event.target.matches(".num") && currentText.childElementCount < 12) {
+    if (event.target.matches(".num") && currentText.childElementCount < 11) {
         if (eventSaver === '=') {
-            currentText.textContent = ''
-            eventSaver = ''
+            currentText.textContent = '';
+            eventSaver = '';
             a = '';
         } else if (eventSaver === 'chain') {
             currentText.textContent = '';
-            eventSaver = 'operator'
+            eventSaver = 'operator';
         }
-        createOperandElement(event);
+        if (event.target.textContent !== '.' && currentText.textContent === '0') {
+            currentText.textContent = '';
+            createOperandElement(event);
+        } else if (event.target.matches('.zero')) {
+            if (currentText.textContent === '') {
+                createOperandElement(event);
+            }
+        } else { createOperandElement(event); }
     } else if (event.target.matches('.clear-all')) {
         history.textContent = '';
         currentText.textContent = '';
@@ -153,34 +191,34 @@ document.addEventListener("click", function (event) {
         } else if (event.target.matches('.multiply')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-                document.querySelector('.history-child').textContent += ' x';
+                history.textContent += ' x';
             } else {
                 setVar(event.target.textContent);
-                createHistoryElement(a.toString(), 'x');
+                history.textContent = `${a.toString()} x`;
             }
         } else if (event.target.matches('.add')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-                document.querySelector('.history-child').textContent += ' +';
+                history.textContent += ' +';
             } else {
                 setVar(event.target.textContent);
-                createHistoryElement(a.toString(), '+');
+                history.textContent = `${a.toString()} +`;
             }
         } else if (event.target.matches('.subtract')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-                document.querySelector('.history-child').textContent += ' -';
+                history.textContent += ' -';
             } else {
                 setVar(event.target.textContent);
-                createHistoryElement(a.toString(), '-');
+                history.textContent = `${a.toString()} -`;
             }
         } else if (event.target.matches('.divide')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
                 chainCalculate();
-                document.querySelector('.history-child').textContent += ' /';
+                history.textContent += ' /';
             } else {
                 setVar(event.target.textContent);
-                createHistoryElement(a.toString(), '/');
+                history.textContent = `${a.toString()} /`;
             }
         } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '' && eventSaver !== 'chain') {
             evaluate();
