@@ -90,15 +90,14 @@ const numCompressor = (prev) => {
 
 //displays answer in currentText element
 const setAns = () => {
-    if (eventSaver === '=') {
+    if (eventSaver === '=' && operator !== '**') {
         history.textContent = `${currentText.textContent} ${operator}`
     } 
-    currentText.textContent = '';
-    if (ans / 100000000000 > 1) { createAnswerElement(ans.toExponential(2)); }
-    else { createAnswerElement(ans.toString()); }
-    if (eventSaver === 'chain') {
+    if (eventSaver === 'chain' && currentText.firstChild.matches('.operand')) {
         history.textContent += ` ${b}`;
-    } else {
+    } else if (operator === '**' && eventSaver !== 'operator' || operator !== '**' && eventSaver === '**') { 
+        history.textContent += ` = ${ans}`;
+    } else if (operator !== '**' && eventSaver !== 'chain') {
         history.textContent += ` ${b} = ${ans}`;
     }
     if (history.textContent.length >= 19) {
@@ -110,6 +109,15 @@ const setAns = () => {
             numCompressor(a);
         }
     } 
+    currentText.textContent = '';
+    if (ans.toString().length > 11) {
+        if (ans / 100000000 < 1) {
+            createAnswerElement(ans.toFixed(2));
+        } else {
+            createAnswerElement(ans.toExponential(2));
+        }
+    }
+    else { createAnswerElement(ans.toString()); }
 }
 
 //evalutes given equation
@@ -150,6 +158,9 @@ const evaluate = () => {
             }
             setAns();
             break;//
+        case '**':
+            ans = parseEntry() ** 2;
+            setAns();
     }
 }
 
@@ -164,8 +175,9 @@ const chainCalculate = () => {
 
 document.addEventListener("click", function (event) {
     if (event.target.matches(".num") && currentText.childElementCount < 11) {
-        if (eventSaver === '=') {
+        if (eventSaver === '=' || eventSaver === '**') {
             currentText.textContent = '';
+            history.textContent = '';
             eventSaver = '';
             a = '';
         } else if (eventSaver === 'chain') {
@@ -176,7 +188,11 @@ document.addEventListener("click", function (event) {
             currentText.textContent = '';
             createOperandElement(event);
         } else if (event.target.matches('.zero')) {
-            if (currentText.textContent === '') {
+            if (currentText.textContent === '' || currentText.firstChild.textContent !== '0') {
+                createOperandElement(event);
+            }
+        } else if (event.target.matches('.decimal')) {
+            if (currentText.textContent.indexOf('.') === -1) {
                 createOperandElement(event);
             }
         } else { createOperandElement(event); }
@@ -184,10 +200,11 @@ document.addEventListener("click", function (event) {
         history.textContent = '';
         currentText.textContent = '';
         a = '';
+        eventSaver = '';
     } else if (currentText.textContent !== '' || eventSaver === 'operator') {
-        if (event.target.matches('.back-space') && eventSaver !== '=') {
+        if (currentText.textContent !== '' && event.target.matches('.back-space') && currentText.firstChild.matches('.operand')) {
             backSpace();
-        } else if (event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
+        } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
@@ -198,7 +215,7 @@ document.addEventListener("click", function (event) {
                 history.textContent = `${a.toString()} x`;
             }
         } else if (event.target.matches('.add')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !=='**') {
                 chainCalculate();
                 history.textContent += ' +';
             } else {
@@ -221,6 +238,19 @@ document.addEventListener("click", function (event) {
                 setVar(event.target.textContent);
                 history.textContent = `${a.toString()} /`;
             }
+        } else if (event.target.matches('.squared')) { 
+            if (eventSaver === 'operator') {
+                let operatorSaver = operator;
+                operator = '**';
+                history.textContent += ` ${parseEntry()}**2`;
+                evaluate();
+                operator = operatorSaver;
+            } else {
+                operator = '**';
+                history.textContent = `${parseEntry()}**2`;
+                evaluate();
+            }
+            eventSaver = '**';
         } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '' && eventSaver !== 'chain') {
             evaluate();
             eventSaver = '=';
