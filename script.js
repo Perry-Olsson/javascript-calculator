@@ -207,7 +207,7 @@ document.addEventListener("click", function (event) {
         } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
                 chainCalculate();
                 history.textContent += ' x';
             } else {
@@ -223,7 +223,7 @@ document.addEventListener("click", function (event) {
                 history.textContent = `${a.toString()} +`;
             }
         } else if (event.target.matches('.subtract')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
                 chainCalculate();
                 history.textContent += ' -';
             } else {
@@ -231,7 +231,7 @@ document.addEventListener("click", function (event) {
                 history.textContent = `${a.toString()} -`;
             }
         } else if (event.target.matches('.divide')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
                 chainCalculate();
                 history.textContent += ' /';
             } else {
