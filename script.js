@@ -11,10 +11,10 @@ const history = document.getElementById('history');
 currentText.textContent = ''
 
 //creates and displays (in currentText element) an element when a digit or decimal is pressed
-const createOperandElement = (event) => {
+const createOperandElement = (text) => {
     let span = document.createElement("span");
     span.setAttribute('class', 'operand selector');
-    span.appendChild(document.createTextNode(event.target.textContent))
+    span.appendChild(document.createTextNode(text))
     currentText.appendChild(span);
 }
 
@@ -66,10 +66,12 @@ const setVar = (op) => {
     } else { operator = op }
 }
 
-const numCompressor = (prev) => {
-    history.textContent = `${prev} ${operator} ${b} =`
+const numCompressor = () => {
     if (history.textContent.length >= 21) {
-        let arr = [prev, b];
+        history.textContent = `${a} ${operator} ${b} =`;
+    }
+    if (history.textContent.length >= 21) {
+        let arr = [a, b];
         let index;
         if (arr[0] >= arr[1]) {
             arr[0] = arr[0].toExponential(2);
@@ -89,7 +91,7 @@ const numCompressor = (prev) => {
 }
 
 //displays answer in currentText element
-const setAns = () => {
+const setAns = (op) => {
     if (eventSaver === '=' && operator !== '**') {
         history.textContent = `${currentText.textContent} ${operator}`
     } 
@@ -103,10 +105,13 @@ const setAns = () => {
     if (history.textContent.length >= 19) {
         if (eventSaver === 'chain') {
             history.textContent = `${ans}`;
-        } else if (eventSaver === '=') { 
-            numCompressor(previousAnswer);
+            numCompressor();
+        } else if (operator === '**') { 
+            history.textContent = `${a} ${op} ${currentText.textContent}**2`;
+            numCompressor();            
         } else {
-            numCompressor(a);
+            history.textContent = `${a} ${operator} ${b} = ${ans}`
+            numCompressor();
         }
     } 
     currentText.textContent = '';
@@ -121,7 +126,7 @@ const setAns = () => {
 }
 
 //evalutes given equation
-const evaluate = () => {
+const evaluate = (op) => {
     previousAnswer = ans;
     switch (operator) {
         case 'x':
@@ -160,7 +165,7 @@ const evaluate = () => {
             break;//
         case '**':
             ans = parseEntry() ** 2;
-            setAns();
+            setAns(op);
     }
 }
 
@@ -186,16 +191,19 @@ document.addEventListener("click", function (event) {
         }
         if (event.target.textContent !== '.' && currentText.textContent === '0') {
             currentText.textContent = '';
-            createOperandElement(event);
+            createOperandElement(event.target.textContent);
         } else if (event.target.matches('.zero')) {
-            if (currentText.textContent === '' || currentText.firstChild.textContent !== '0') {
-                createOperandElement(event);
+            if (currentText.textContent === '' || currentText.firstChild.textContent !== '0' || currentText.textContent.indexOf('.') !== -1) {
+                createOperandElement(event.target.textContent);
             }
         } else if (event.target.matches('.decimal')) {
-            if (currentText.textContent.indexOf('.') === -1) {
-                createOperandElement(event);
+            if (currentText.textContent === '') {
+                createOperandElement('0');
             }
-        } else { createOperandElement(event); }
+            if (currentText.textContent.indexOf('.') === -1) {
+                createOperandElement(event.target.textContent);
+            }
+        } else { createOperandElement(event.target.textContent); }
     } else if (event.target.matches('.clear-all')) {
         history.textContent = '';
         currentText.textContent = '';
@@ -211,39 +219,60 @@ document.addEventListener("click", function (event) {
                 chainCalculate();
                 history.textContent += ' x';
             } else {
-                setVar(event.target.textContent);
-                history.textContent = `${a.toString()} x`;
+                if (eventSaver === 'chain') {
+                    history.textContent = history.textContent.slice(0, -1) + 'x';
+                } else {
+                    setVar(event.target.textContent);
+                    history.textContent = `${a.toString()} x`;
+                }
             }
         } else if (event.target.matches('.add')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !=='**') {
                 chainCalculate();
                 history.textContent += ' +';
             } else {
-                setVar(event.target.textContent);
-                history.textContent = `${a.toString()} +`;
+                if (eventSaver === 'chain') {
+                    history.textContent = history.textContent.slice(0, -1) + '+';
+                } else {
+                    setVar(event.target.textContent);
+                    history.textContent = `${a.toString()} +`;
+                }
             }
         } else if (event.target.matches('.subtract')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
                 chainCalculate();
                 history.textContent += ' -';
             } else {
-                setVar(event.target.textContent);
-                history.textContent = `${a.toString()} -`;
+                if (eventSaver === 'chain') {
+                    history.textContent = history.textContent.slice(0, -1) + '-';
+                } else {
+                    setVar(event.target.textContent);
+                    history.textContent = `${a.toString()} -`;
+                }
             }
         } else if (event.target.matches('.divide')) {
             if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
                 chainCalculate();
                 history.textContent += ' /';
             } else {
-                setVar(event.target.textContent);
-                history.textContent = `${a.toString()} /`;
+                if (eventSaver === 'chain') {
+                    history.textContent = history.textContent.slice(0, -1) + '/';
+                } else {
+                    setVar(event.target.textContent);
+                    history.textContent = `${a.toString()} /`;
+                }
             }
-        } else if (event.target.matches('.squared')) { 
-            if (eventSaver === 'operator') {
+        } else if (event.target.matches('.squared') && currentText.textContent !== '' && eventSaver !== 'chain') { 
+            if (eventSaver === 'operator' || eventSaver === '**' && operator !== '**') {
                 let operatorSaver = operator;
                 operator = '**';
-                history.textContent += ` ${parseEntry()}**2`;
-                evaluate();
+                if (eventSaver === 'operator') {
+                    history.textContent += ` ${parseEntry()}**2`;
+                } else {
+                    history.textContent += '**2';
+                    eventSaver = 'operator';
+                }
+                evaluate(operatorSaver);
                 operator = operatorSaver;
             } else {
                 operator = '**';
