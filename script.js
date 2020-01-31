@@ -1,9 +1,42 @@
-let a = ''; //store first entered number
-let b = ''; //store second number
-let ans;  //store last answer
+let operands = []; //stores operation
 let eventSaver; //Store last event when needed
-let operator; //store operator
 let previousAnswer;
+
+const evaluate = (op='') => {
+    let ans;
+    let operandArr = operands.map((item) => {
+        if (item.length > 1 && item.length !== undefined) {
+            return parseFloat(item.slice(0, item.indexOf('*')), 10) ** 2;
+        } else { return item; }
+    });
+    for (let i = 0; i < operandArr.length; i++) {
+        if (operandArr[i] === 'x') {
+            ans = operandArr[i - 1] * operandArr[i + 1];
+            operandArr.splice(i - 1, 3, ans);
+            i--;
+        } else if (operandArr[i] === '/') {
+            ans = operandArr[i - 1] / operandArr[i + 1];
+            operandArr.splice(i - 1, 3, ans);
+            i--;
+        }
+    }
+    while (operandArr.length > 1) {
+        switch (operandArr[1]) {
+            case '+':
+                ans = operandArr[0] + operandArr[2];
+                operandArr = operandArr.slice(3);
+                operandArr.unshift(ans);
+                break;
+            case '-':
+                ans = operandArr[0] - operandArr[2];
+                operandArr = operandArr.slice(3);
+                operandArr.unshift(ans);
+                break;
+        }
+    
+    }
+    setAns(operandArr[0]);
+}
 
 //html element where numbers entered are displayed
 const currentText = document.getElementById("current-text");
@@ -54,22 +87,41 @@ const parseEntry = () => {
 //saves first entry and/or operator when an operator key is pressed
 const setVar = (op) => {
     if (currentText.textContent !== '') {
-        if (currentText.firstChild.matches('.answer') && eventSaver === 'chain') {
-            operator = op
-        } else {
-            if (eventSaver === '=') { a = ans }
-            else { a = parseEntry(); }
+        /*if (currentText.firstChild.matches('.answer') && eventSaver === 'chain') {
+            operands[operands.length - 1] = op
+        } else {*/
+            if (eventSaver === '=') { operands.push(ans, op); }
+            else { operands.push(parseEntry(), op); }
             eventSaver = 'operator';
-            operator = op;
             currentText.textContent = '';
-        }
-    } else { operator = op }
+            history.textContent = operands.join(' ');
+        //}
+    } else {
+        changeOperator(op);
+    }
 }
 
-const numCompressor = () => {
-    if (history.textContent.length >= 21) {
-        history.textContent = `${a} ${operator} ${b} =`;
+const numCompressor = (op) => {
+    //checks to see if compressed chain equation can fit in text box
+    // removes answer and checks again then converts to sci notation if needed
+    if (eventSaver === 'chain') {
+        history.textContent = `${ans}`;
+    } else if (operator === '**' && eventSaver !== '**') {
+        history.textContent = `${a} ${op} ${currentText.textContent}**2`;
+    } else if (operator === '**' && eventSaver === '**') {
+        history.textContent = history.textContent.replace(ans, '');
+        if (history.textContent.length >= 21) {
+            history.textContent = `${a.toExponential(2)}**2 =`;
+        }
+        return;
+    } else {
+        //compresses the chain equation history
+        history.textContent = `${a} ${operator} ${b} = ${ans}`
+        if (history.textContent.length >= 21) {
+            history.textContent = `${a} ${operator} ${b} =`;
+        }
     }
+    
     if (history.textContent.length >= 21) {
         let arr = [a, b];
         let index;
@@ -91,29 +143,13 @@ const numCompressor = () => {
 }
 
 //displays answer in currentText element
-const setAns = (op) => {
-    if (eventSaver === '=' && operator !== '**') {
-        history.textContent = `${currentText.textContent} ${operator}`
-    } 
-    if (eventSaver === 'chain' && currentText.firstChild.matches('.operand')) {
-        history.textContent += ` ${b}`;
-    } else if (operator === '**' && eventSaver !== 'operator' || operator !== '**' && eventSaver === '**') { 
+const setAns = (ans, op) => {
+    if (eventSaver !== 'chain') {
         history.textContent += ` = ${ans}`;
-    } else if (operator !== '**' && eventSaver !== 'chain') {
-        history.textContent += ` ${b} = ${ans}`;
     }
-    if (history.textContent.length >= 19) {
-        if (eventSaver === 'chain') {
-            history.textContent = `${ans}`;
-            numCompressor();
-        } else if (operator === '**') { 
-            history.textContent = `${a} ${op} ${currentText.textContent}**2`;
-            numCompressor();            
-        } else {
-            history.textContent = `${a} ${operator} ${b} = ${ans}`
-            numCompressor();
-        }
-    } 
+    /*if (history.textContent.length >= 19) {
+        numCompressor(op);
+    } */
     currentText.textContent = '';
     if (ans.toString().length > 11) {
         if (ans / 100000000 < 1) {
@@ -125,57 +161,24 @@ const setAns = (op) => {
     else { createAnswerElement(ans.toString()); }
 }
 
-//evalutes given equation
-const evaluate = (op) => {
-    previousAnswer = ans;
-    switch (operator) {
-        case 'x':
-            if (eventSaver === '=') { ans *= b; }
-            else {
-                b = parseEntry();
-                ans = a * b
-            }
-            setAns();
-            break;
-        case '+':
-            if (eventSaver === '=') { ans += b; }
-            else {
-                b = parseEntry();
-                ans = a + b;
-            }
-            setAns();
-            break;
-        case '-':
-            if (eventSaver === '=') {
-                ans -= b;
-            }
-            else {
-                b = parseEntry();
-                ans = a - b;
-            }
-            setAns();
-            break;//
-        case '/':
-            if (eventSaver === '=') { ans /= b; }
-            else {
-                b = parseEntry();
-                ans = a / b;
-            }
-            setAns();
-            break;//
-        case '**':
-            ans = parseEntry() ** 2;
-            setAns(op);
-    }
-}
 
 /*allows chain calculations e.g. 2 x 3 x 5 while displaying each answer as more 
 numbers and operators are entered*/
-const chainCalculate = () => {
+const chainCalculate = (op) => {
     eventSaver = 'chain';
-    evaluate();
-    operator = event.target.textContent;
-    a = ans;
+    operands.push(parseEntry());
+    if (op === 'x' || op === '/') {
+        if (operands.indexOf('+') !== -1 || operands.indexOf('-') !== -1) {
+            currentText.textContent = '';
+        }
+    } else { evaluate(); }
+    operands.push(op);
+    history.textContent = operands.join(' ');
+}
+
+const changeOperator = (op) => {
+    operands[operands.length - 1] = op;
+    history.textContent = operands.join(' ');
 }
 
 document.addEventListener("click", function (event) {
@@ -184,7 +187,7 @@ document.addEventListener("click", function (event) {
             currentText.textContent = '';
             history.textContent = '';
             eventSaver = '';
-            a = '';
+            operands = [];
         } else if (eventSaver === 'chain') {
             currentText.textContent = '';
             eventSaver = 'operator';
@@ -209,79 +212,80 @@ document.addEventListener("click", function (event) {
         currentText.textContent = '';
         a = '';
         eventSaver = '';
+        operands = [];
     } else if (currentText.textContent !== '' || eventSaver === 'operator') {
         if (currentText.textContent !== '' && event.target.matches('.back-space') && currentText.firstChild.matches('.operand')) {
             backSpace();
         } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
-                chainCalculate();
-                history.textContent += ' x';
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand')) {               
+                chainCalculate('x');
             } else {
                 if (eventSaver === 'chain') {
-                    history.textContent = history.textContent.slice(0, -1) + 'x';
+                    changeOperator('x');
                 } else {
-                    setVar(event.target.textContent);
-                    history.textContent = `${a.toString()} x`;
+                    setVar('x');
                 }
             }
         } else if (event.target.matches('.add')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !=='**') {
-                chainCalculate();
-                history.textContent += ' +';
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand')) {
+                chainCalculate('+'); 
             } else {
                 if (eventSaver === 'chain') {
-                    history.textContent = history.textContent.slice(0, -1) + '+';
+                    changeOperator('+');
                 } else {
-                    setVar(event.target.textContent);
-                    history.textContent = `${a.toString()} +`;
+                    setVar('+');
                 }
             }
         } else if (event.target.matches('.subtract')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
-                chainCalculate();
-                history.textContent += ' -';
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+                chainCalculate('-');
             } else {
                 if (eventSaver === 'chain') {
-                    history.textContent = history.textContent.slice(0, -1) + '-';
+                    changeOperator('-');
                 } else {
-                    setVar(event.target.textContent);
-                    history.textContent = `${a.toString()} -`;
+                    setVar('-');
                 }
             }
         } else if (event.target.matches('.divide')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand') || eventSaver === '**' && operator !== '**') {
-                chainCalculate();
-                history.textContent += ' /';
+            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+                chainCalculate('/');
             } else {
                 if (eventSaver === 'chain') {
-                    history.textContent = history.textContent.slice(0, -1) + '/';
+                    changeOperator('/');
                 } else {
-                    setVar(event.target.textContent);
-                    history.textContent = `${a.toString()} /`;
+                    setVar('/');
                 }
             }
         } else if (event.target.matches('.squared') && currentText.textContent !== '' && eventSaver !== 'chain') { 
-            if (eventSaver === 'operator' || eventSaver === '**' && operator !== '**') {
-                let operatorSaver = operator;
-                operator = '**';
-                if (eventSaver === 'operator') {
-                    history.textContent += ` ${parseEntry()}**2`;
-                } else {
-                    history.textContent += '**2';
-                    eventSaver = 'operator';
-                }
-                evaluate(operatorSaver);
-                operator = operatorSaver;
-            } else {
-                operator = '**';
-                history.textContent = `${parseEntry()}**2`;
-                evaluate();
+            if (operands.length < 2) {
+                operands = [];
             }
-            eventSaver = '**';
-        } else if (event.target.matches('.equals') && a !== '' && currentText.textContent !== '' && eventSaver !== 'chain') {
-            evaluate();
+            operands.push(`${parseEntry()}**2`) 
+            history.textContent = operands.join(' ');
+            if (eventSaver === 'chain' || eventSaver === 'operator') {
+                let tempAns = parseEntry() ** 2;
+                currentText.textContent = '';
+                createAnswerElement(tempAns.toString());
+            } else { evaluate(); }
+            eventSaver = '**'; 
+        } else if (event.target.matches('.equals') && operands != [] && currentText.textContent !== '' && eventSaver !== 'chain') {
+            let temp = parseEntry();
+            if (eventSaver === '=') {
+                if (operands.length < 2) {
+                    operands = [`${temp}**2`]
+                } else {
+                    operands = operands.slice(-2);
+                    operands.unshift(temp);
+                }
+            } else if (eventSaver === '**') { 
+                if (operands.length < 2) {
+                    operands = [`${temp}**2`]
+                } 
+            } else { operands.push(temp); }
+            history.textContent = operands.join(' ');
+            evaluate(operands);
             eventSaver = '=';
         }
     }
