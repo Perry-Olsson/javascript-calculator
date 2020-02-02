@@ -90,11 +90,11 @@ const setVar = (op) => {
         /*if (currentText.firstChild.matches('.answer') && eventSaver === 'chain') {
             operands[operands.length - 1] = op
         } else {*/
-            if (eventSaver === '=') { operands.push(ans, op); }
-            else { operands.push(parseEntry(), op); }
-            eventSaver = 'operator';
-            currentText.textContent = '';
-            history.textContent = operands.join(' ');
+        if (eventSaver === '=') { operands = [] }
+        operands.push(parseEntry(), op);
+        eventSaver = 'operator';
+        currentText.textContent = '';
+        history.textContent = operands.join(' ');
         //}
     } else {
         changeOperator(op);
@@ -165,8 +165,10 @@ const setAns = (ans, op) => {
 /*allows chain calculations e.g. 2 x 3 x 5 while displaying each answer as more 
 numbers and operators are entered*/
 const chainCalculate = (op) => {
+    if (eventSaver !== '**') {
+        operands.push(parseEntry());
+    }
     eventSaver = 'chain';
-    operands.push(parseEntry());
     if (op === 'x' || op === '/') {
         if (operands.indexOf('+') !== -1 || operands.indexOf('-') !== -1) {
             currentText.textContent = '';
@@ -219,8 +221,8 @@ document.addEventListener("click", function (event) {
         } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
-            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand')) {               
-                chainCalculate('x');
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {               
+                    chainCalculate('x');
             } else {
                 if (eventSaver === 'chain') {
                     changeOperator('x');
@@ -229,7 +231,7 @@ document.addEventListener("click", function (event) {
                 }
             }
         } else if (event.target.matches('.add')) {
-            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {
                 chainCalculate('+'); 
             } else {
                 if (eventSaver === 'chain') {
@@ -239,7 +241,7 @@ document.addEventListener("click", function (event) {
                 }
             }
         } else if (event.target.matches('.subtract')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {
                 chainCalculate('-');
             } else {
                 if (eventSaver === 'chain') {
@@ -249,7 +251,7 @@ document.addEventListener("click", function (event) {
                 }
             }
         } else if (event.target.matches('.divide')) {
-            if (currentText.textContent !== '' && a !== '' && currentText.firstChild.matches('.operand')) {
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {
                 chainCalculate('/');
             } else {
                 if (eventSaver === 'chain') {
@@ -259,12 +261,17 @@ document.addEventListener("click", function (event) {
                 }
             }
         } else if (event.target.matches('.squared') && currentText.textContent !== '' && eventSaver !== 'chain') { 
-            if (operands.length < 2) {
-                operands = [];
+            if (eventSaver === '**') {
+                if (operands.length < 2) {
+                    operands = [];
+                }
+                else {
+                    operands.pop();
+                }
             }
             operands.push(`${parseEntry()}**2`) 
             history.textContent = operands.join(' ');
-            if (eventSaver === 'chain' || eventSaver === 'operator') {
+            if (eventSaver === 'chain' || eventSaver === 'operator' || eventSaver === '**' && operands.length > 1) {
                 let tempAns = parseEntry() ** 2;
                 currentText.textContent = '';
                 createAnswerElement(tempAns.toString());
