@@ -2,11 +2,29 @@ let operands = []; //stores operation
 let eventSaver; //Store last event when needed
 let previousAnswer;
 
-const evaluate = (op='') => {
+const spruceUp = () => {
+    const operandMakeOver = operands.map((item, index) => {
+        if (item.length !== undefined) {
+            if (item.indexOf('r') !== -1) {
+                if (index === 0) {
+                    return `<img src='images/square-root-mathematical-symbol.png' style='left: 0px'width='50px' height='50px'><span style='right:15px; margin-right: 0'>${(item.slice(item.indexOf('r') + 1))}</span>`;
+                }
+                return `<img src='images/square-root-mathematical-symbol.png' width='50px' height='50px'><span>${(item.slice(item.indexOf('r') + 1))}</span>`;
+            } else { return item; }
+        } else { return item; }
+    })
+    return operandMakeOver;
+}
+
+const evaluate = () => {
     let ans;
     let operandArr = operands.map((item) => {
-        if (item.length > 1 && item.length !== undefined) {
-            return parseFloat(item.slice(0, item.indexOf('*')), 10) ** 2;
+        if (item.length !== undefined) {
+            if (item.indexOf('*') !== -1) {
+                return parseFloat(item.slice(0, item.indexOf('*')), 10) ** 2;
+            } else if (item.indexOf('r') !== -1) {
+                return Math.sqrt(parseFloat(item.slice(item.indexOf('r') + 1)))
+            } else { return item; }
         } else { return item; }
     });
     for (let i = 0; i < operandArr.length; i++) {
@@ -20,7 +38,12 @@ const evaluate = (op='') => {
             i--;
         }
     }
+    let i = 0
     while (operandArr.length > 1) {
+        if (i === 100) {
+            console.log('error');
+            break;
+        }
         switch (operandArr[1]) {
             case '+':
                 ans = operandArr[0] + operandArr[2];
@@ -33,14 +56,16 @@ const evaluate = (op='') => {
                 operandArr.unshift(ans);
                 break;
         }
-    
+    i++
     }
-    setAns(operandArr[0]);
+    return operandArr[0];
 }
 
 //html element where numbers entered are displayed
 const currentText = document.getElementById("current-text");
 const history = document.getElementById('history');
+const textBox = document.getElementById('text-box-wrapper')
+const viewPort = document.querySelector('html');
 currentText.textContent = ''
 
 //creates and displays (in currentText element) an element when a digit or decimal is pressed
@@ -94,66 +119,65 @@ const setVar = (op) => {
         operands.push(parseEntry(), op);
         eventSaver = 'operator';
         currentText.textContent = '';
-        history.textContent = operands.join(' ');
+        history.innerHTML = spruceUp(operands)
+            .join(' ');
         //}
     } else {
         changeOperator(op);
     }
 }
 
-const numCompressor = (op) => {
-    //checks to see if compressed chain equation can fit in text box
-    // removes answer and checks again then converts to sci notation if needed
-    if (eventSaver === 'chain') {
-        history.textContent = `${ans}`;
-    } else if (operator === '**' && eventSaver !== '**') {
-        history.textContent = `${a} ${op} ${currentText.textContent}**2`;
-    } else if (operator === '**' && eventSaver === '**') {
-        history.textContent = history.textContent.replace(ans, '');
-        if (history.textContent.length >= 21) {
-            history.textContent = `${a.toExponential(2)}**2 =`;
-        }
-        return;
-    } else {
-        //compresses the chain equation history
-        history.textContent = `${a} ${operator} ${b} = ${ans}`
-        if (history.textContent.length >= 21) {
-            history.textContent = `${a} ${operator} ${b} =`;
-        }
+const numCompressor = () => {
+    const compress = (a, b) => {
+        if (a / b < 1) {
+            return a.toFixed(2);
+        } else { return a.toExponential(2); }
     }
-    
-    if (history.textContent.length >= 21) {
-        let arr = [a, b];
-        let index;
-        if (arr[0] >= arr[1]) {
-            arr[0] = arr[0].toExponential(2);
-            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`;
-            index = 1;
+    if (history.textContent.length >= 19) {
+        console.log('hello');
+        if (operands.length > 3) {
+            if (event.target.matches('.square-root')) {
+                history.innerHTML = spruceUp(operands).join(' ') + ' =';
+            } else {
+                operands = [evaluate()];
+                history.innerHTML = spruceUp(operands).join(' ');
+            }
+        } else { history.innerHTML = spruceUp(operands).join(' ') + ' ='; }
+    }
+    if (history.textContent.length >= 19) {
+        if (operands.length === 1) {
+            operands[0] = compress(operands[0], 1000000000);
+        } else {
+            if (operands[0].toString().length > operands[2].toString().length) {
+                operands[0] = compress(operands[0], 100000);
+                if (operands.join(' ').length < 19) {
+                    history.innerHTML = spruceUp(operands).join(' ') + ' =';
+                    return
+                }
+                operands[2] = compress(operands[2], 100000);
+            } else {
+                operands[2] = compress(operands[2], 100000);
+                if (operands.join(' ').length < 19) {
+                    history.innerHTML = spruceUp(operands).join(' ') + ' =';
+                    return
+                }
+                operands[0] = compress(operands[0], 100000);
+            }
         }
-        else {
-            arr[1] = arr[1].toExponential(2);
-            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`;
-            index = 0;
-        }
-        if (history.textContent.length >= 21) {
-            arr[index] = arr[index].toExponential(2);
-            history.textContent = `${arr[0]} ${operator} ${arr[1]} =`
-        } 
+        history.innerHTML = spruceUp(operands).join(' ') + ' =';
     }
 }
 
 //displays answer in currentText element
 const setAns = (ans, op) => {
     if (eventSaver !== 'chain') {
-        history.textContent += ` = ${ans}`;
+        history.innerHTML += ` = ${ans}`;
     }
-    /*if (history.textContent.length >= 19) {
-        numCompressor(op);
-    } */
+    numCompressor();
     currentText.textContent = '';
     if (ans.toString().length > 11) {
         if (ans / 100000000 < 1) {
-            createAnswerElement(ans.toFixed(2));
+            createAnswerElement(ans.toFixed(11 - (ans.toString().indexOf('.') + 1)));
         } else {
             createAnswerElement(ans.toExponential(2));
         }
@@ -172,15 +196,16 @@ const chainCalculate = (op) => {
     if (op === 'x' || op === '/') {
         if (operands.indexOf('+') !== -1 || operands.indexOf('-') !== -1) {
             currentText.textContent = '';
-        }
-    } else { evaluate(); }
+            numCompressor();
+        } else { setAns(evaluate()); }
+    } else { setAns(evaluate()); }
     operands.push(op);
-    history.textContent = operands.join(' ');
+    history.innerHTML = spruceUp(operands).join(' ');
 }
 
 const changeOperator = (op) => {
     operands[operands.length - 1] = op;
-    history.textContent = operands.join(' ');
+    history.innerHTML = spruceUp(operands).join(' ');
 }
 
 document.addEventListener("click", function (event) {
@@ -221,8 +246,8 @@ document.addEventListener("click", function (event) {
         } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
         } else if (event.target.matches('.multiply')) {
-            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {               
-                    chainCalculate('x');
+            if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {
+                chainCalculate('x');
             } else {
                 if (eventSaver === 'chain') {
                     changeOperator('x');
@@ -232,7 +257,7 @@ document.addEventListener("click", function (event) {
             }
         } else if (event.target.matches('.add')) {
             if (currentText.textContent !== '' && operands[0] !== undefined && currentText.firstChild.matches('.operand') || eventSaver === '**') {
-                chainCalculate('+'); 
+                chainCalculate('+');
             } else {
                 if (eventSaver === 'chain') {
                     changeOperator('+');
@@ -260,7 +285,7 @@ document.addEventListener("click", function (event) {
                     setVar('/');
                 }
             }
-        } else if (event.target.matches('.squared') && currentText.textContent !== '' && eventSaver !== 'chain') { 
+        } else if (event.target.matches('.squared') && currentText.textContent !== '' && eventSaver !== 'chain') {
             if (eventSaver === '**') {
                 if (operands.length < 2) {
                     operands = [];
@@ -268,15 +293,20 @@ document.addEventListener("click", function (event) {
                 else {
                     operands.pop();
                 }
-            }
-            operands.push(`${parseEntry()}**2`) 
-            history.textContent = operands.join(' ');
+            } else if (eventSaver === '=') { operands = []; }
+            operands.push(`${parseEntry()}**2`);
+            numCompressor();
+            history.innerHTML = spruceUp(operands).join(' ');
             if (eventSaver === 'chain' || eventSaver === 'operator' || eventSaver === '**' && operands.length > 1) {
                 let tempAns = parseEntry() ** 2;
                 currentText.textContent = '';
                 createAnswerElement(tempAns.toString());
-            } else { evaluate(); }
-            eventSaver = '**'; 
+            } else { setAns(evaluate()); }
+            eventSaver = '**';
+        } else if (event.target.matches('.square-root') && currentText.textContent !== '' && eventSaver !== 'chain') {
+            operands.push(`2r${parseEntry()}`);
+            history.innerHTML = spruceUp(operands).join(' ');
+            setAns(evaluate());
         } else if (event.target.matches('.equals') && operands != [] && currentText.textContent !== '' && eventSaver !== 'chain') {
             let temp = parseEntry();
             if (eventSaver === '=') {
@@ -291,8 +321,8 @@ document.addEventListener("click", function (event) {
                     operands = [`${temp}**2`]
                 } 
             } else { operands.push(temp); }
-            history.textContent = operands.join(' ');
-            evaluate(operands);
+            history.innerHTML = operands.join(' ');
+            setAns(evaluate());
             eventSaver = '=';
         }
     }
