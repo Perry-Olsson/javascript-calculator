@@ -80,7 +80,7 @@ body {
 }
 
 #button-wrapper {
-     background-color: #6176A7;
+    background-color: #6176A7;
     padding: 15px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -100,7 +100,11 @@ body {
 
 @media only screen and (max-width: 550px) {
     .btn {
-        font-size: 5vw;
+        font-size: 7vw;
+    }
+
+    .btn img {
+        width: 12vw;
     }
 }
 
