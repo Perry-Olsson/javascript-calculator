@@ -30,7 +30,7 @@ body {
     }
 }
 
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 820px) {
     #calc-wrapper {
         height: 100vh;
     }
