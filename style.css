@@ -87,6 +87,13 @@ body {
     grid-template-rows: repeat(6, 1fr);
 }
 
+@media only screen and (max-width: 550px) {
+    #button-wrapper {
+        width: 100%;
+    }
+}
+
+
 .btn {
     background-image: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(51, 51, 51, 1));
     margin: 1px;
