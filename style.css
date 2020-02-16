@@ -27,6 +27,7 @@ body {
 @media only screen and (max-width: 550px) {
     #calc-wrapper {
         width: 100%;
+        box-shadow: none;
     }
     .selector {
         font-size: 13vw;
@@ -36,6 +37,7 @@ body {
 @media only screen and (max-height: 820px) {
     #calc-wrapper {
         height: 100vh;
+        box-shadow: none;
     }
 }
 
@@ -86,13 +88,6 @@ body {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(6, 1fr);
 }
-
-@media only screen and (max-width: 550px) {
-    #button-wrapper {
-        width: 100%;
-    }
-}
-
 
 .btn {
     background-image: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(51, 51, 51, 1));
