@@ -13,6 +13,7 @@ body {
     align-items: center;
 }
 
+
 #calc-wrapper {
     width: 450px;
     height: 650px;
@@ -21,6 +22,21 @@ body {
     display: grid;
     grid-template-rows: 1fr 3fr;
     box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .6);
+}
+
+@media only screen and (max-width: 550px) {
+    #calc-wrapper {
+        width: 100vw;
+    }
+}
+
+@media only screen and (max-height: 800px) {
+    #calc-wrapper {
+        height: 100vh;
+    }
+      .selector {
+        font-size: 9vh;
+    }
 }
 
 #text-box-wrapper {
@@ -56,20 +72,6 @@ body {
     position: relative;
     margin-right: 15px;
 }
-
-/*textarea {
-    width: 100%;
-    height: 55%;
-    resize: none;
-    border: none;
-    text-align: right;
-    padding: 0 1.1rem;
-    font-size: 2.5rem;
-}
-
-textarea:focus {
-    outline: none;
-}*/
 
 #button-wrapper {
      background-color: #6176A7;

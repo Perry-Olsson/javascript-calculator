@@ -3,6 +3,7 @@ let eventSaver; //Store last event when needed
 const currentText = document.getElementById("current-text");
 const history = document.getElementById('history');
 const textBox = document.getElementById('text-box-wrapper')
+const html = document.querySelector('html');
 currentText.textContent = ''
 
 const spruceUp = () => {
