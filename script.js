@@ -2,7 +2,7 @@ let operands = []; //stores operation
 let eventSaver; //Store last event when needed
 const currentText = document.getElementById("current-text");
 const history = document.getElementById('history');
-const textBox = document.getElementById('text-box-wrapper')
+const textBox = document.getElementById('history')
 const html = document.querySelector('html');
 currentText.textContent = ''
 
@@ -170,9 +170,6 @@ const numCompressor = (ans, op=0) => {
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
         let operandsCopy = operands.map((item) => { return item; });
-        console.log(operandsCopy)
-        console.log(textBox.offsetHeight)
-        console.log(textBoxHeight);
         if (operandsCopy.length === 1) {
             operandsCopy[0] = compress(operandsCopy[0], 1000000000);
         } else {
@@ -239,7 +236,8 @@ const chainCalculate = (op) => {
 
 const changeOperator = (op) => {
     operands[operands.length - 1] = op;
-    history.innerHTML = spruceUp(operands).join(' ');
+    numCompressor('', op)
+    //history.innerHTML = spruceUp(operands).join(' ');
 }
 
 const mdas = (op) => {
