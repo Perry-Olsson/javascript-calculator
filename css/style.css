@@ -29,6 +29,7 @@ body {
 @media only screen and (max-height: 640px) {
   #calc-wrapper {
       height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
   }
     .selector {
     font-size: 12vh;
@@ -48,6 +49,7 @@ body {
 @media only screen and (max-height: 820px) and (max-width: 400px) {
     #calc-wrapper {
         height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
         box-shadow: none;
     }
 }
