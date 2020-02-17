@@ -87,13 +87,6 @@ const createAnswerElement = (answer) => {
     currentText.appendChild(span);
 }
 
-/*const createHistoryElement = (num, sign = '') => {
-    history.textContent = '';
-    let span = document.createElement('span');
-    span.setAttribute('class', 'history-child');
-    span.appendChild(document.createTextNode(`${num} ${sign}`));
-    history.appendChild(span);
-}*/
 //deletes most recently entered digit or decimal point
 const backSpace = () => {
     let temp = document.querySelectorAll('.operand');

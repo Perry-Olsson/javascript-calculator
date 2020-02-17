@@ -110,11 +110,11 @@ body {
 }
 .row {
     height: 16.667%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
 }
 
 .btn {
+    width: 25%;
     background-image: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(51, 51, 51, 1));
     margin: 1px;
     border: 2px solid #444;
@@ -201,6 +201,6 @@ body {
 }
 
 .zero {
-    grid-column: 1/3;
+    width: 50%;
 }
 
