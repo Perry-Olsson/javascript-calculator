@@ -261,6 +261,11 @@ const percent = (op) => {
 
 //}
 
+window.addEventListener('resize', () => {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+})
+
 document.addEventListener("click", function (event) {
     if (event.target.matches(".num") && currentText.childElementCount < 11) {
         if (eventSaver === '=' || eventSaver === '**' || eventSaver === 'r') {
