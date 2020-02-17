@@ -3,13 +3,8 @@
 }
 
 body {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    height: 100%;
     margin: 0;
+    padding: 0;
 }
 
 #content-wrapper {
@@ -32,13 +27,6 @@ body {
 }
 
 @media only screen and (max-width: 550px) {
-    #content-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-    }
     #calc-wrapper {
         width: 100vw;
         box-shadow: none;
@@ -48,11 +36,28 @@ body {
     }
 }
 
-@media only screen and (max-height: 900px) {
+@media only screen and (max-height: 820px) and (max-width: 400px) {
     #calc-wrapper {
         height: 100vh;
         box-shadow: none;
     }
+}
+
+@media only screen and (max-height: 640px) {
+  .selector {
+    font-size: 10vh;
+  }
+}
+
+@media only screen and (max-height: 500px) {
+  #content-wrapper {
+    overflow: auto;
+  }
+  #calc-wrapper {
+    height: 500px;
+    position: absolute;
+    top: 0;
+  }
 }
 
 #text-box-wrapper {
@@ -73,7 +78,7 @@ body {
 
 #history {
     justify-content: flex-start;
-    font-size: 2.5em;
+    font-size: 2.3em;
     color: #999;
 }
 

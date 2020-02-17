@@ -6,8 +6,8 @@ const textBox = document.getElementById('text-box-wrapper')
 const html = document.querySelector('html');
 currentText.textContent = ''
 
-const spruceUp = () => {
-    const operandMakeOver = operands.map((item, index) => {
+const spruceUp = (operation) => {
+    const operandMakeOver = operation.map((item, index) => {
         if (item.length !== undefined) {
             if (item.indexOf('r') !== -1) {
                 if (index === 0) {
@@ -20,9 +20,9 @@ const spruceUp = () => {
     return operandMakeOver;
 }
 
-const evaluate = (operands) => {
+const evaluate = (operation) => {
     let ans;
-    let operandArr = operands.map((item) => {
+    let operandArr = operation.map((item) => {
         if (item.length !== undefined) {
             if (item.indexOf('*') !== -1) {
                 return parseFloat(item.slice(0, item.indexOf('*')), 10) ** 2;
@@ -154,39 +154,47 @@ const numCompressor = (ans, op=0) => {
         if (operands.length > 3) {
             if (event.target.matches('.equals')) {
                 history.innerHTML = spruceUp(operands).join(' ') + ' =';
-            } else {
+            }
+            if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
                 if (operands.length % 2 === 0) {
                     operands = operands.slice(0, -1);
-                } 
+                }
                 let operandSaver = operands.slice(-2);
                 operands = [evaluate(operands.slice(0, -2))];
                 operands.push(operandSaver[0], operandSaver[1]);
                 history.innerHTML = spruceUp(operands).join(' ');
                 if (op !== 0) { operands.push(op); }
+                history.innerHTML = spruceUp(operands).join(' ');
             }
-        } else { history.innerHTML = spruceUp(operands).join(' ') + ' ='; }
+        } else { history.innerHTML = spruceUp(operands).join(' '); }
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
-        if (operands.length === 1) {
-            operands[0] = compress(operands[0], 1000000000);
+        let operandsCopy = operands.map((item) => { return item; });
+        console.log(operandsCopy)
+        console.log(textBox.offsetHeight)
+        console.log(textBoxHeight);
+        if (operandsCopy.length === 1) {
+            operandsCopy[0] = compress(operandsCopy[0], 1000000000);
         } else {
-            if (operands[0].toString().length > operands[2].toString().length) {
-                operands[0] = compress(operands[0], 100000);
-                history.innerHTML = spruceUp(operands).join(' ') + ' =';
-                if (textBox.offsetHeight === textBoxHeight || textBox.offsetWidth === textBoxWidth) {
-                    return
+            if (operandsCopy[0].toString().length >= operandsCopy[2].toString().length) {
+                operandsCopy[0] = compress(operandsCopy[0], 100000);
+                history.innerHTML = spruceUp(operandsCopy).join(' ');
+                if (textBox.offsetHeight === textBoxHeight && textBox.offsetWidth === textBoxWidth) {
+                    return;
                 }
-                operands[2] = compress(operands[2], 100000);
+                operandsCopy[2] = compress(operandsCopy[2], 100000);
             } else {
-                operands[2] = compress(operands[2], 100000);
-                history.innerHTML = spruceUp(operands).join(' ') + ' =';
-                if (textBox.offsetHeight === textBoxHeight || textBox.offsetWidth === textBoxWidth) {
-                    return
+                operandsCopy[2] = compress(operandsCopy[2], 100000);
+                history.innerHTML = spruceUp(operandsCopy).join(' ');
+                if (textBox.offsetHeight === textBoxHeight && textBox.offsetWidth === textBoxWidth) {
+                    return;
                 }
-                operands[0] = compress(operands[0], 100000);
+                operandsCopy[0] = compress(operandsCopy[0], 100000);
             }
         }
-        history.innerHTML = spruceUp(operands).join(' ') + ' =';
+        if (event.target.matches('.equals')) {
+            history.innerHTML = spruceUp(operandsCopy).join(' ') + ' =';
+        } else { history.innerHTML = spruceUp(operandsCopy).join(' '); }
     }
 }
 
@@ -226,7 +234,7 @@ const chainCalculate = (op) => {
             numCompressor('', op);
         } else { setAns(evaluate(operands.slice(0, -1)), op); }
     } else { setAns(evaluate(operands.slice(0, -1)), op); }
-    history.innerHTML = spruceUp(operands).join(' ');
+    //history.innerHTML = spruceUp(operands).join(' ');
 }
 
 const changeOperator = (op) => {
@@ -377,7 +385,7 @@ document.addEventListener("click", function (event) {
                     operands = [`${temp}%`];
                 } else { operands.push(`${temp}%`); }
             } else { operands.push(temp); }
-            setAns(evaluate(operands));
+            setAns(evaluate(operands), '=');
             eventSaver = '=';
         }
     }
