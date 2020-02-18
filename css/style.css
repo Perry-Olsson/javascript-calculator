@@ -33,11 +33,11 @@ body {
       height: calc(var(--vh, 1vh) * 100);
   }
     .selector {
-    font-size: 12vh;
+    font-size: 10vh;
   }
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 500px) {
     #calc-wrapper {
         width: 100vw;
         box-shadow: none;
@@ -48,14 +48,11 @@ body {
 }
 
 @media only screen and (max-height: 820px) and (max-width: 450px) {
-    * {
-        overflow: hidden;
-    }
     #calc-wrapper, #content-wrapper, body {
         height: 100vh;
         height: calc(var(--vh, 1vh) * 100);
         position: fixed;
-        top: 0;
+        top:0;
         left: 0;
         box-shadow: none;
     }
@@ -101,9 +98,9 @@ body {
     opacity: 50%;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 500px) {
     #history {
-        font-size: 10vw;
+        font-size: 8vw;
     }
 }
 
