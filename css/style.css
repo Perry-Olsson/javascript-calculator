@@ -4,6 +4,11 @@
 }
 
 body {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     margin: 0;
     padding: 0;
 }
@@ -129,8 +134,8 @@ body {
 
 .btn {
     width: 25%;
+    margin: .25%;
     background-image: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(51, 51, 51, 1));
-    margin: 2px;
     border: 2px solid #444;
     border-radius: 4px;
     color: white;
@@ -139,16 +144,8 @@ body {
     justify-content: center;
     align-items: center;
 }
-@media only screen and (max-height: 820px) and (max-width: 500px) {
-    .btn {
-        width: 23vw;
-    }
-    .zero {
-        width: 47vw !important;
-    }
-}
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 500px) {
     .btn {
         font-size: 7vw;
     }
@@ -156,6 +153,12 @@ body {
     .btn img {
         width: 12vw;
     }
+}
+
+@media only screen and (max-height: 650px) {
+.btn img {
+    width: 8vh;
+}
 }
 
 .btn:active {
@@ -223,6 +226,6 @@ body {
 }
 
 .zero {
-    width: 51.2%;
+    width: 50.5%;
 }
 
