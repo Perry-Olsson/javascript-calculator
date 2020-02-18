@@ -119,8 +119,10 @@ body {
     height: 75%;
     background-color: #6176A7;
     padding: 15px;
+    width: 100%;
 }
 .row {
+    width: 100%;
     height: 16.667%;
     display: flex;
 }
