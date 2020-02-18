@@ -47,7 +47,7 @@ body {
     }
 }
 
-@media only screen and (max-height: 820px) and (max-width: 450px) {
+@media only screen and (max-height: 820px) and (max-width: 500px) {
     #calc-wrapper, #content-wrapper, body {
         height: 100vh;
         height: calc(var(--vh, 1vh) * 100);
