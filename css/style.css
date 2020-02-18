@@ -48,7 +48,7 @@ body {
 }
 
 @media only screen and (max-height: 820px) and (max-width: 500px) {
-    #calc-wrapper, #content-wrapper, body {
+    #calc-wrapper, #content-wrapper {
         height: 100vh;
         height: calc(var(--vh, 1vh) * 100);
         position: fixed;
@@ -61,6 +61,7 @@ body {
 @media only screen and (max-height: 500px) {
   #content-wrapper {
     overflow: auto;
+    position: relative;
   }
   #calc-wrapper {
     height: 500px;
