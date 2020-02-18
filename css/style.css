@@ -139,6 +139,14 @@ body {
     justify-content: center;
     align-items: center;
 }
+@media only screen and (max-height: 820px) and (max-width: 500px) {
+    .btn {
+        width: 23vw;
+    }
+    .zero {
+        width: 47vw !important;
+    }
+}
 
 @media only screen and (max-width: 550px) {
     .btn {
