@@ -293,9 +293,9 @@ document.addEventListener("click", function (event) {
             if (currentText.textContent.indexOf('.') === -1) {
                 createOperandElement(event.target.textContent);
             }
-        } else if (event.target.matches('.sign')) { 
+        } else if (event.target.matches('.sign')) {
             if (currentText.textContent.indexOf('-') === -1) { createOperandElement('-', 1) }
-            else { document.querySelector('.operand').remove();}
+            else { document.querySelector('.operand').remove(); }
         } else { createOperandElement(event.target.textContent); }
     } else if (event.target.matches('.clear-all')) {
         history.textContent = '';
@@ -307,12 +307,12 @@ document.addEventListener("click", function (event) {
             backSpace();
         } else if (currentText.textContent !== '' && event.target.matches('.clear') && currentText.firstChild.matches('.operand')) {
             currentText.textContent = '';
-        } else if (event.target.matches('.percent') && currentText.textContent.indexOf('%') === -1 && currentText.textContent !== '') {
-            if (eventSaver === '=') { 
+        } else if (event.target.matches('.percent') && currentText.textContent.indexOf('%') === -1 && currentText.textContent !== '' && currentText.childElementCount < 11) {
+            if (eventSaver === '=') {
                 history.textContent = '';
                 operands = [];
             }
-            createOperandElement('%'); 
+            createOperandElement('%');
             eventSaver = '%';
         } else if (event.target.matches('.multiply')) {
             if (eventSaver === '%') { mdas('of') }

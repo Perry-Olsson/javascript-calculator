@@ -175,7 +175,7 @@ body {
         box-shadow: none;
     }
     .selector {
-        font-size: 10vw;
+        font-size: 14vw;
     }
 }
 
@@ -189,29 +189,16 @@ body {
         box-shadow: none;
     }
 
+    #history {
+        font-size: 7vh;
+    }
     /*#content-wrapper {
         height: 100vh;
         height: calc(var(--vh, 1vh) * 100);
     }*/
 }
 
-@media only screen and (max-height: 500px) {
-  #content-wrapper {
-    overflow: auto;
-    position: relative;
-  }
-  #calc-wrapper {
-    height: 450px;
-    position: absolute;
-    top: 0;
-  }
-}
-
-
 @media only screen and (max-width: 500px) {
-    #history {
-        font-size: 9vw;
-    }
     .btn {
         font-size: 7vw;
     }
@@ -221,6 +208,17 @@ body {
     }
 }
 
+@media only screen and (max-height: 500px) {
+  #content-wrapper {
+    overflow: auto;
+    position: relative;
+  }
+  #calc-wrapper {
+    height: 500px;
+    position: absolute;
+    top: 0;
+  }
+}
 
 @media only screen and (max-height: 650px) {
 .btn img {
