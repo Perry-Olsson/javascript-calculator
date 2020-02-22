@@ -48,9 +48,13 @@ body {
     font: 4em Arial;
 }
 
-#history {
+.history-container {
     justify-content: flex-start;
-    font-size: 2.3em;
+}
+
+#history {
+    width: 100%;
+    font-size: .5em;
     color: #999;
 }
 
@@ -187,22 +191,12 @@ body {
     }
 
     #history {
-        font-size: 5.5vh;
+        font-size: 8.5vw;
     }
     /*#content-wrapper {
         height: 100vh;
         height: calc(var(--vh, 1vh) * 100);
     }*/
-}
-
-@media only screen and (max-width: 500px) {
-    .btn {
-        font-size: 7vw;
-    }
-
-    .btn img {
-        width: 12vw;
-    }
 }
 
 @media only screen and (max-height: 500px) {
@@ -218,8 +212,10 @@ body {
 }
 
 @media only screen and (max-height: 650px) and (max-width: 500px) {
-.btn img {
-    width: 10vh;
+@media only screen and (min-height: 500px) {
+    .btn img {
+    width: 8vh;
+}
 }
 
 .selector {
@@ -232,3 +228,9 @@ body {
     }
 }
 }
+@media only screen and (max-width: 500px) {
+    .btn {
+        font-size: 7vw;
+    }
+}
+
