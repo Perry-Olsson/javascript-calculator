@@ -18,7 +18,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+   /* overflow: hidden;*/
 }
 
 
@@ -164,9 +164,6 @@ body {
       height: 100vh;
       height: calc(var(--vh, 1vh) * 100);
   }
-    .selector {
-    font-size: 10vh;
-  }
 }
 
 @media only screen and (max-width: 500px) {
@@ -220,8 +217,18 @@ body {
   }
 }
 
-@media only screen and (max-height: 650px) {
+@media only screen and (max-height: 650px) and (max-width: 500px) {
 .btn img {
     width: 10vh;
+}
+
+.selector {
+    font-size: 12vw;
+}
+
+@media only screen and (min-width: 400px) {
+    .selector {
+        font-size: 10vw;
+    }
 }
 }

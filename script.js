@@ -134,9 +134,19 @@ const numCompressor = (ans, op=0) => {
     let textBoxHeight = textBox.offsetHeight;
     let textBoxWidth = textBox.offsetWidth;
     const compress = (a, b) => {
-        if (a / b < 1) {
-            return parseFloat(a.toFixed(2));
-        } else { return a.toExponential(2); }
+        const compressor = (num) => {
+            if (a / b < 1) { return parseFloat(num.toFixed(2)); }
+            else { return num.toExponential(2)}
+        }
+        if (a.length !== undefined) {
+            if (a.indexOf('*') !== -1) {
+                a = parseFloat(a.slice(0, -3));
+                return `${compressor(a)}**2`;
+            } else {
+                a = parseFloat(a.slice(2));
+                return `2r${compressor(a)}`;
+            }
+        } else { return compressor(a); }
     }
     history.innerHTML = spruceUp(operands).join(' ');
     if (event.target.matches('.equals')) {
@@ -257,6 +267,13 @@ const percent = (op) => {
     eventSaver = 'operator';
 }
 
+const clear = () => {
+    currentText.textContent = '';
+    history.textContent = '';
+    eventSaver = '';
+    operands = [];
+}
+
 //const exponentiate = (operand, operation, event) {
 
 //}
@@ -268,16 +285,23 @@ window.addEventListener('resize', () => {
 
 document.addEventListener("click", function (event) {
     if (event.target.matches(".num") && currentText.childElementCount < 11) {
-        if (eventSaver === '=' || eventSaver === '**' || eventSaver === 'r') {
-            currentText.textContent = '';
-            history.textContent = '';
-            eventSaver = '';
-            operands = [];
+        if (eventSaver === '=') {
+            clear()
         } else if (eventSaver === 'chain') {
             currentText.textContent = '';
             eventSaver = 'operator';
         } else if (eventSaver === '%') {
             percent('of');
+        } else if (eventSaver === '**' || eventSaver === 'r') {
+            if (operands.length > 1) {
+                currentText.textContent = '';
+                operands = operands.slice(0, -1);
+                history.innerHTML = spruceUp(operands).join(' ');
+                if (operands.length > 3) { eventSaver = 'chain'; }
+                else { eventSaver = 'operator'; }
+            } else {
+                clear();
+            }
         }
         if (event.target.textContent !== '.' && currentText.textContent === '0') {
             currentText.textContent = '';
@@ -334,7 +358,6 @@ document.addEventListener("click", function (event) {
             } else if (eventSaver === '=') { operands = []; }
             operands.push(`${parseEntry()}**2`);
             numCompressor();
-            history.innerHTML = spruceUp(operands).join(' ');
             if (eventSaver === 'chain' || eventSaver === 'operator' || eventSaver === '**' && operands.length > 1 || eventSaver === 'r' && operands.length > 1) {
                 let tempAns = parseEntry() ** 2;
                 currentText.textContent = '';
@@ -352,7 +375,6 @@ document.addEventListener("click", function (event) {
             } else if (eventSaver === '=') { operands = []; }
             operands.push(`2r${parseEntry()}`);
             numCompressor();
-            history.innerHTML = spruceUp(operands).join(' ');
             if (eventSaver === 'chain' || eventSaver === 'operator' || eventSaver === '**' && operands.length > 1 || eventSaver === 'r' && operands.length > 1) {
                 let tempAns = Math.sqrt(parseEntry());
                 currentText.textContent = '';
