@@ -32,54 +32,6 @@ body {
     box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, .6);
 }
 
-@media only screen and (max-height: 640px) {
-  #calc-wrapper {
-      height: 100vh;
-      height: calc(var(--vh, 1vh) * 100);
-  }
-    .selector {
-    font-size: 10vh;
-  }
-}
-
-@media only screen and (max-width: 500px) {
-    #calc-wrapper {
-        width: 100vw;
-        box-shadow: none;
-    }
-    .selector {
-        font-size: 10vw;
-    }
-}
-
-@media only screen and (max-height: 820px) and (max-width: 500px) {
-    #calc-wrapper {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-        position: fixed;
-        top:0;
-        left: 0;
-        box-shadow: none;
-    }
-
-    #content-wrapper {
-        height: 100vh;
-        height: calc(var(--vh, 1vh) * 100);
-    }
-}
-
-@media only screen and (max-height: 500px) {
-  #content-wrapper {
-    overflow: auto;
-    position: relative;
-  }
-  #calc-wrapper {
-    height: 500px;
-    position: absolute;
-    top: 0;
-  }
-}
-
 #text-box-wrapper {
     height: 25%;
     display: grid;
@@ -107,12 +59,6 @@ body {
     bottom: 5px;
     left: 15px;
     opacity: 50%;
-}
-
-@media only screen and (max-width: 500px) {
-    #history {
-        font-size: 8vw;
-    }
 }
 
 #history span {
@@ -143,22 +89,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-@media only screen and (max-width: 500px) {
-    .btn {
-        font-size: 7vw;
-    }
-
-    .btn img {
-        width: 12vw;
-    }
-}
-
-@media only screen and (max-height: 650px) {
-.btn img {
-    width: 8vh;
-}
 }
 
 .btn:active {
@@ -229,3 +159,71 @@ body {
     width: 50.5%;
 }
 
+@media only screen and (max-height: 640px) {
+  #calc-wrapper {
+      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
+  }
+    .selector {
+    font-size: 10vh;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+    #calc-wrapper {
+        width: 100vw;
+        box-shadow: none;
+    }
+    .selector {
+        font-size: 10vw;
+    }
+}
+
+@media only screen and (max-height: 820px) and (max-width: 500px) {
+    #calc-wrapper {
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+        position: fixed;
+        top:0;
+        left: 0;
+        box-shadow: none;
+    }
+
+    /*#content-wrapper {
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+    }*/
+}
+
+@media only screen and (max-height: 500px) {
+  #content-wrapper {
+    overflow: auto;
+    position: relative;
+  }
+  #calc-wrapper {
+    height: 450px;
+    position: absolute;
+    top: 0;
+  }
+}
+
+
+@media only screen and (max-width: 500px) {
+    #history {
+        font-size: 9vw;
+    }
+    .btn {
+        font-size: 7vw;
+    }
+
+    .btn img {
+        width: 12vw;
+    }
+}
+
+
+@media only screen and (max-height: 650px) {
+.btn img {
+    width: 10vh;
+}
+}
