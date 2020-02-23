@@ -13,9 +13,9 @@ const spruceUp = (operation) => {
         if (item.length !== undefined) {
             if (item.indexOf('r') !== -1) {
                 if (index === 0) {
-                    return `<img src='images/square-root-mathematical-symbol.png' style='left: 0px'width='50px' height='50px'><span style='right:15px; margin-right: 0'>${(item.slice(item.indexOf('r') + 1))}</span>`;
+                    return `<img src='images/square-root-mathematical-symbol.png' style='left: 0px'width='50px'><span style='right:15px; margin-right: 0'>${(item.slice(item.indexOf('r') + 1))}</span>`;
                 }
-                return `<img src='images/square-root-mathematical-symbol.png' width='50px' height='50px'><span>${(item.slice(item.indexOf('r') + 1))}</span>`;
+                return `<img src='images/square-root-mathematical-symbol.png' width='50px'><span>${(item.slice(item.indexOf('r') + 1))}</span>`;
             } else { return item; }
         } else { return item; }
     })

@@ -53,6 +53,9 @@ body {
 }
 
 #history {
+    display: flex;
+    align-items: center;
+    min-height: 65%;
     width: 100%;
     font-size: .5em;
     color: #999;
