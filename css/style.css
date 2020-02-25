@@ -68,9 +68,16 @@ body {
     opacity: 50%;
 }
 
-#history span {
+#sqrt {
     position: relative;
     margin-right: 15px;
+}
+
+#sqr {
+    position: relative;
+    font-size: 0.5em;
+    bottom: 0.6em;
+    margin-right: 5px;
 }
 
 #button-wrapper {
@@ -173,6 +180,17 @@ body {
   }
 }
 
+@media only screen and (max-height: 650px) {
+    .selector {
+        font-size: 0.8em;
+    }
+    @media only screen and (min-height: 500px) {
+            .selector {
+            font-size: 10vh;
+        }
+    }
+}
+
 @media only screen and (max-width: 500px) {
     #calc-wrapper {
         width: 100vw;
@@ -214,22 +232,24 @@ body {
   }
 }
 
+
+
 @media only screen and (max-height: 650px) and (max-width: 500px) {
-@media only screen and (min-height: 500px) {
-    .btn img {
-    width: 8vh;
-}
-}
+    @media only screen and (min-height: 500px) {
+            .btn img {
+            width: 8vh;
+        }
+    }
 
 .selector {
     font-size: 12vw;
 }
 
-@media only screen and (min-width: 400px) {
-    .selector {
-        font-size: 10vw;
+    @media only screen and (min-width: 400px) {
+        .selector {
+            font-size: 10vw;
+        }
     }
-}
 }
 @media only screen and (max-width: 500px) {
     .btn {

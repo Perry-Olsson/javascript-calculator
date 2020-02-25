@@ -13,9 +13,11 @@ const spruceUp = (operation) => {
         if (item.length !== undefined) {
             if (item.indexOf('r') !== -1) {
                 if (index === 0) {
-                    return `<img src='images/square-root-mathematical-symbol.png' style='left: 0px'width='50px'><span style='right:15px; margin-right: 0'>${(item.slice(item.indexOf('r') + 1))}</span>`;
+                    return `<img src='images/square-root-mathematical-symbol.png' style='left: 0px'width='50px'><span id='sqrt' style='right:15px; margin-right: 0'>${(item.slice(item.indexOf('r') + 1))}</span>`;
                 }
-                return `<img src='images/square-root-mathematical-symbol.png' width='50px'><span>${(item.slice(item.indexOf('r') + 1))}</span>`;
+                return `<img src='images/square-root-mathematical-symbol.png' width='50px'><span id='sqrt'>${(item.slice(item.indexOf('r') + 1))}</span>`;
+            } else if (item.indexOf('*') !== -1) {
+                return `${item.slice(0, item.indexOf('*'))}<span id='sqr'>2</span>`;
             } else { return item; }
         } else { return item; }
     })
@@ -125,7 +127,9 @@ const setVar = (op) => {
 }
 
 const removeZeros = (ans) => {
-    let finalAnswer = ans.toFixed(11 - (ans.toString().indexOf('.') + 1)).toString();
+    let decimalIndex = ans.toString().indexOf('.');
+    if (decimalIndex > 9) { decimalIndex = 9; }
+    let finalAnswer = ans.toFixed(11 - (decimalIndex + 1)).toString();
     while (finalAnswer[finalAnswer.length - 1] === '0') { finalAnswer = finalAnswer.slice(0, -1); }
     return finalAnswer
 }
@@ -156,8 +160,10 @@ const numCompressor = (ans, op=0) => {
         history.innerHTML += ` = ${ans}`;
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
+        let equals = '';
         if (operands.length > 3) {
             if (event.target.matches('.equals')) {
+                equals = ' =';
                 history.innerHTML = spruceUp(operands).join(' ') + ' =';
             }
             if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
@@ -169,9 +175,9 @@ const numCompressor = (ans, op=0) => {
                 operands.push(operandSaver[0], operandSaver[1]);
                 history.innerHTML = spruceUp(operands).join(' ');
                 if (op !== 0) { operands.push(op); }
-                history.innerHTML = spruceUp(operands).join(' ');
+                history.innerHTML = spruceUp(operands).join(' ') + equals;
             }
-        } else { history.innerHTML = spruceUp(operands).join(' '); }
+        } //else { history.innerHTML = spruceUp(operands).join(' '); }
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
         let operandsCopy = operands.map((item) => { return item; });
@@ -405,7 +411,7 @@ document.addEventListener("click", function (event) {
                     operands = [`${temp}%`];
                 } else { operands.push(`${temp}%`); }
             } else { operands.push(temp); }
-            setAns(evaluate(operands), '=');
+            setAns(evaluate(operands));
             eventSaver = '=';
         }
     }
