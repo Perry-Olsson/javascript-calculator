@@ -3,7 +3,6 @@ let eventSaver; //Store last event when needed
 const currentText = document.getElementById("current-text");
 const history = document.getElementById('history');
 const textBox = document.getElementById('history')
-const html = document.querySelector('html');
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 currentText.textContent = ''
