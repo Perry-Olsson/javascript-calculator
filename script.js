@@ -2,10 +2,10 @@ let operands = []; //stores operation
 let eventSaver; //Store last event when needed
 const currentText = document.getElementById("current-text");
 const history = document.getElementById('history');
-const textBox = document.getElementById('history')
+const textBox = document.getElementById('history');
 let vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
-currentText.textContent = ''
+currentText.textContent = '';
 
 const spruceUp = (operation) => {
     const operandMakeOver = operation.map((item, index) => {
@@ -160,11 +160,11 @@ const numCompressor = (ans, op=0) => {
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
         let equals = '';
+        if (event.target.matches('.equals')) {
+            equals = ' =';
+            history.innerHTML = spruceUp(operands).join(' ') + ' =';
+        }
         if (operands.length > 3) {
-            if (event.target.matches('.equals')) {
-                equals = ' =';
-                history.innerHTML = spruceUp(operands).join(' ') + ' =';
-            }
             if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
                 if (operands.length % 2 === 0) {
                     operands = operands.slice(0, -1);
@@ -176,7 +176,7 @@ const numCompressor = (ans, op=0) => {
                 if (op !== 0) { operands.push(op); }
                 history.innerHTML = spruceUp(operands).join(' ') + equals;
             }
-        } //else { history.innerHTML = spruceUp(operands).join(' '); }
+        }
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
         let operandsCopy = operands.map((item) => { return item; });
