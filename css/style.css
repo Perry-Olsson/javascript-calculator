@@ -55,10 +55,11 @@ body {
 #history {
     display: flex;
     align-items: center;
-    min-height: 65%;
+    min-height: 1.4em;
     width: 100%;
     font-size: .5em;
     color: #999;
+    line-height: 1;
 }
 
 #history img {
@@ -235,6 +236,9 @@ body {
 
 
 @media only screen and (max-height: 650px) and (max-width: 500px) {
+    .btn img {
+        width: 50%;
+    }
     @media only screen and (min-height: 500px) {
             .btn img {
             width: 8vh;
