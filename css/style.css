@@ -236,14 +236,11 @@ body {
 
 
 @media only screen and (max-height: 650px) and (max-width: 500px) {
-    .btn img {
-        width: 50%;
-    }
-    @media only screen and (min-height: 500px) {
-            .btn img {
-            width: 8vh;
+            @media only screen and (min-width: 450px){
+                .btn img {
+            width: 50%;
+            }
         }
-    }
 
 .selector {
     font-size: 12vw;
