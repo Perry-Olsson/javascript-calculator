@@ -159,7 +159,7 @@ const numCompressor = (ans, op=0) => {
         history.innerHTML += ` = ${ans}`;
     }
     if (textBox.offsetHeight > textBoxHeight || textBox.offsetWidth > textBoxWidth) {
-        let equals = '';
+        var equals = '';
         if (event.target.matches('.equals')) {
             equals = ' =';
             history.innerHTML = spruceUp(operands).join(' ') + ' =';
@@ -185,14 +185,14 @@ const numCompressor = (ans, op=0) => {
         } else {
             if (operandsCopy[0].toString().length >= operandsCopy[2].toString().length) {
                 operandsCopy[0] = compress(operandsCopy[0], 100000);
-                history.innerHTML = spruceUp(operandsCopy).join(' ');
+                history.innerHTML = spruceUp(operandsCopy).join(' ') + equals;
                 if (textBox.offsetHeight === textBoxHeight && textBox.offsetWidth === textBoxWidth) {
                     return;
                 }
                 operandsCopy[2] = compress(operandsCopy[2], 100000);
             } else {
                 operandsCopy[2] = compress(operandsCopy[2], 100000);
-                history.innerHTML = spruceUp(operandsCopy).join(' ');
+                history.innerHTML = spruceUp(operandsCopy).join(' ') + equals;
                 if (textBox.offsetHeight === textBoxHeight && textBox.offsetWidth === textBoxWidth) {
                     return;
                 }
