@@ -12,11 +12,11 @@
 
 ## Reflection
 
-##### Inspiration
+#### Inspiration
 
 This was my first personal project and I was inspired to create it after finishing the DOM manipulation section of a udemy course I was taking. It was the first time I felt like I could actually program something useful so I immediately put a hold on the udemy course and spent the next month building this calculator.
 
-##### Technologies
+#### Technologies
 
 - HTML
 - CSS
@@ -24,7 +24,7 @@ This was my first personal project and I was inspired to create it after finishi
 
 I hadn't been introduced to React or any UI framework/library at this point, and hadn't a clue about how to write well structured code that's modularized with a sensible file structure, but I was determined to create this calculator. So all of the javascript is in one file, all of the css is in one file, and there is one index.html file. Yikes!!!!
 
-##### Takeaways
+#### Takeaways
 
 This ended up being great first hand experience of how important writing clean and maintainable code is. The entire script is one large if else statement inside a callback passed to a click event listener on the document object. It is not pleasant to look it. By the end of the project having to fix really any bug was a bit of a nightmare. I'll give my inexperienced self at the time a pat on the back for getting everything to work relatively bug free (...eventually), but I was happy to move on.
 
