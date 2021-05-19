@@ -12,11 +12,11 @@
 
 ## Reflection
 
-##### Inspiration
+#### Inspiration
 
 This was my first personal project and I was inspired to create it after finishing the DOM manipulation section of a udemy course I was taking. It was the first time I felt like I could actually program something useful so I immediately put a hold on the udemy course and spent the next month building this calculator.
 
-##### Technologies
+#### Technologies
 
 - HTML
 - CSS
@@ -24,7 +24,7 @@ This was my first personal project and I was inspired to create it after finishi
 
 I hadn't been introduced to React or any UI framework/library at this point, and hadn't a clue about how to write well structured code that's modularized with a sensible file structure, but I was determined to create this calculator. So all of the javascript is in one file, all of the css is in one file, and there is one index.html file. Yikes!!!!
 
-##### Takeaways
+#### Takeaways
 
 Even to someone with minimal programming experience, a calculator seems like a relatively simple thing to build on the face of it. I mean heck, the programming language you write it in will almost certainly take care of all of the math for you. While it's definitely no triple A title or social networking application it ends up being more of a challenge than you would think if you want to have a bug free calculator that mimics the calculators were all used to using. There's just a lot of edge cases that show up and there's no easy way around them...Especially if you write spaghetti code.
 
