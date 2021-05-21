@@ -12,8 +12,7 @@
 
 ## Reflection
 
-**TLDR**
-Applications written in vanilla javascript have a high chance to turning into spaghetti code, but the calculator actually turned out alright.
+**TLDR**<br/>Applications written in vanilla javascript have a high chance to turning into spaghetti code, but the calculator actually turned out alright.
 
 #### Inspiration
 
